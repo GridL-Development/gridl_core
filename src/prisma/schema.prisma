@@ -1,0 +1,702 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGODB_URI")
+}
+
+enum clientStatus {
+  Active
+  Inactive
+}
+
+enum YesNo {
+  Yes
+  No
+}
+
+model Config {
+  id                         String          @id @default(auto()) @map("_id") @db.ObjectId
+  defaultIsoCurrencyId       String          @db.ObjectId
+  defaultIsoCurrency         CurrencyIsoCode @relation(fields: [defaultIsoCurrencyId], references: [id])
+  defaultCurrencyId          String          @db.ObjectId
+  defaultCurrency            Currency        @relation(fields: [defaultCurrencyId], references: [id])
+  defaultTopLevelName        String
+  defaultTopLevelDescription String
+  createdAt                  DateTime?       @default(now())
+  updatedAt                  DateTime?       @updatedAt
+}
+
+model Country {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  iso_3166_2_code String    @unique
+  createdAt       DateTime? @default(now())
+  updatedAt       DateTime? @updatedAt
+  Client          Client[]
+  User            User[]
+}
+
+type addressType {
+  address1 String?
+  address2 String?
+  city     String?
+  state    String?
+}
+
+enum userRole {
+  Admin
+  Manager
+  User
+}
+
+model User {
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  firstName        String
+  lastName         String
+  email            String    @unique
+  authProviderId   String    @unique
+  role             userRole  @default(User)
+  countryId        String?   @db.ObjectId
+  country          Country?  @relation(fields: [countryId], references: [id])
+  permissions      String[]
+  clientId         String    @db.ObjectId
+  client           Client    @relation(fields: [clientId], references: [id])
+  defaultInstance  String    @db.ObjectId
+  selectedInstance String?   @db.ObjectId
+  lastLogin        DateTime  @default(now())
+  createdAt        DateTime? @default(now())
+  updatedAt        DateTime? @updatedAt
+}
+
+model Client {
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+  name       String       @unique
+  code       String       @unique
+  status     clientStatus @default(Active)
+  address    addressType?
+  countryId  String?      @db.ObjectId
+  country    Country?     @relation(fields: [countryId], references: [id])
+  contactId  String?      @db.ObjectId // will reference a user from the User collection
+  users      User[]
+  instances  Instance[]
+  lastLogin  DateTime     @default(now())
+  createdAt  DateTime?    @default(now())
+  updatedAt  DateTime?    @updatedAt
+  Permission Permission[]
+}
+
+model Permission {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String    @unique
+  code        String    @unique
+  clientId    String    @db.ObjectId
+  client      Client    @relation(fields: [clientId], references: [id])
+  actions     String[]
+  subjects    String[]
+  description String?
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @updatedAt
+}
+
+enum instanceStatus {
+  Active
+  Inactive
+}
+
+model Instance {
+  id                            String                         @id @default(auto()) @map("_id") @db.ObjectId
+  code                          String
+  name                          String
+  clientId                      String                         @db.ObjectId
+  client                        Client                         @relation(fields: [clientId], references: [id])
+  description                   String?
+  status                        instanceStatus                 @default(Active)
+  userIds                       String[]                       @db.ObjectId
+  levels                        Level[]
+  versions                      Version[]
+  currencies                    Currency[]
+  accounts                      Account[]
+  models                        Model[]
+  dimensions                    Dimension[]
+  dimensionValues               DimensionValue[]
+  levelAttributes               LevelAttribute[]
+  dimensionValueAttributes      DimensionValueAttribute[]
+  accountAttributes             AccountAttribute[]
+  levelAttValues                LevelAttributeValue[]
+  accountAttValues              AccountAttributeValue[]
+  dimensionValueAttributeValues DimensionValueAttributeValue[]
+  modelData                     ModelData[]
+  modelDataCalculations         ModelDataCalculations[]
+  modelAccounts                 ModelAccountStructure[]
+  tables                        Table[]
+  tableData                     TableData[]
+  createdAt                     DateTime?                      @default(now())
+  updatedAt                     DateTime?                      @updatedAt
+
+  @@unique([clientId, code])
+}
+
+enum versionStatus {
+  Locked
+  Unlocked
+  Archived
+}
+
+model Version {
+  id                    String                  @id @default(auto()) @map("_id") @db.ObjectId
+  code                  String
+  name                  String
+  begin                 DateTime
+  end                   DateTime
+  startOfPlan           DateTime
+  description           String?
+  isDefault             Boolean                 @default(false)
+  isActuals             Boolean                 @default(false)
+  status                versionStatus           @default(Unlocked)
+  clientId              String                  @db.ObjectId
+  instanceId            String                  @db.ObjectId
+  instance              Instance                @relation(fields: [instanceId], references: [id])
+  createdAt             DateTime?               @default(now())
+  updatedAt             DateTime?               @updatedAt
+  modelData             ModelData[]
+  modelDataCalculations ModelDataCalculations[]
+
+  @@unique([clientId, code, instanceId])
+}
+
+model CurrencyIsoCode {
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
+  code       String
+  name       String
+  currencies Currency[]
+  config     Config[]
+  createdAt  DateTime?  @default(now())
+  updatedAt  DateTime?  @updatedAt
+
+  @@unique([code])
+}
+
+model Currency {
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  code              String
+  currencyIsoCodeId String          @db.ObjectId
+  currencyIsoCode   CurrencyIsoCode @relation(fields: [currencyIsoCodeId], references: [id])
+  assignedLevels    Int
+  isDefault         YesNo           @default(No)
+  clientId          String          @db.ObjectId
+  instanceId        String          @db.ObjectId
+  instance          Instance        @relation(fields: [instanceId], references: [id])
+  levels            Level[]
+  defaults          Config[]
+  createdAt         DateTime?       @default(now())
+  updatedAt         DateTime?       @updatedAt
+
+  @@unique([clientId, instanceId, currencyIsoCodeId, code])
+}
+
+model Level {
+  id                    String                   @id @default(auto()) @map("_id") @db.ObjectId
+  code                  String
+  name                  String
+  isRoot                Boolean                  @default(false)
+  description           String?
+  parentId              String?                  @db.ObjectId
+  clientId              String                   @db.ObjectId
+  AttributeAndValues    LevelAttributeAndValue[]
+  parent                Level?                   @relation(name: "ChildLevels", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  instanceId            String                   @db.ObjectId
+  instance              Instance                 @relation(fields: [instanceId], references: [id])
+  currencyId            String                   @db.ObjectId
+  currency              Currency                 @relation(fields: [currencyId], references: [id])
+  childLevels           Level[]                  @relation("ChildLevels")
+  modelData             ModelData[]
+  modeldataCalculations ModelDataCalculations[]
+  createdAt             DateTime?                @default(now())
+  updatedAt             DateTime?                @updatedAt
+
+  @@unique(fields: [clientId, code, instanceId], name: "uniqueCode")
+}
+
+model LevelAttributeAndValue {
+  id               String               @id @default(auto()) @map("_id") @db.ObjectId
+  levelId          String               @db.ObjectId
+  clientId         String               @db.ObjectId
+  instanceId       String               @db.ObjectId
+  attributeId      String               @db.ObjectId
+  attributeValueId String               @db.ObjectId
+  levelCode        String
+  level            Level?               @relation(fields: [levelId], references: [id])
+  attribute        LevelAttribute?      @relation(fields: [attributeId], references: [id])
+  attributeValue   LevelAttributeValue? @relation(fields: [attributeValueId], references: [id])
+  createdAt        DateTime?            @default(now())
+  updatedAt        DateTime?            @updatedAt
+}
+
+model LevelAttributeValue {
+  id                      String                   @id @default(auto()) @map("_id") @db.ObjectId
+  code                    String
+  name                    String
+  attributeId             String                   @db.ObjectId
+  parentId                String?                  @db.ObjectId
+  clientId                String                   @db.ObjectId
+  instanceId              String                   @db.ObjectId
+  parent                  LevelAttributeValue?     @relation(name: "ChildAttributeValues", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  childAttributeValues    LevelAttributeValue[]    @relation("ChildAttributeValues")
+  instance                Instance                 @relation(fields: [instanceId], references: [id])
+  levelAttribute          LevelAttribute           @relation(fields: [attributeId], references: [id])
+  levelAttributeAndValues LevelAttributeAndValue[]
+  createdAt               DateTime?                @default(now())
+  updatedAt               DateTime?                @updatedAt
+
+  @@unique([clientId, code, instanceId, attributeId])
+}
+
+model LevelAttribute {
+  id                      String                   @id @default(auto()) @map("_id") @db.ObjectId
+  code                    String
+  name                    String
+  description             String?
+  clientId                String                   @db.ObjectId
+  instanceId              String                   @db.ObjectId
+  attributeValueDefault   String?                  @db.ObjectId
+  createdAt               DateTime?                @default(now())
+  updatedAt               DateTime?                @updatedAt
+  instance                Instance                 @relation(fields: [instanceId], references: [id])
+  levelAttributeValues    LevelAttributeValue[]
+  levelAttributeAndValues LevelAttributeAndValue[]
+
+  @@unique([clientId, code, instanceId])
+}
+
+enum AccountType {
+  GL
+  Custom
+}
+
+enum AccountTypeTag {
+  PnL
+  BalanceSheet
+  Custom
+  Model
+}
+
+enum ActPlanBy {
+  Balance
+  Delta
+}
+
+enum ActActualsBy {
+  Balance
+  Delta
+}
+
+enum TimeStratum {
+  Week
+  Month
+}
+
+enum ActDisplayAs {
+  Currency
+  Decimal
+  Percentage
+}
+
+model AccountAttribute {
+  id                     String                     @id @default(auto()) @map("_id") @db.ObjectId
+  code                   String
+  name                   String
+  description            String?
+  attributeValueDefault  String?                    @db.ObjectId
+  clientId               String                     @db.ObjectId
+  instanceId             String                     @db.ObjectId
+  instance               Instance                   @relation(fields: [instanceId], references: [id])
+  accountAttributeValues AccountAttributeValue[]
+  AttributeAndValues     AccountAttributeAndValue[]
+  createdAt              DateTime?                  @default(now())
+  updatedAt              DateTime?                  @updatedAt
+
+  @@unique([clientId, code, instanceId])
+}
+
+model AccountAttributeValue {
+  id                   String                     @id @default(auto()) @map("_id") @db.ObjectId
+  code                 String
+  name                 String
+  attributeId          String                     @db.ObjectId
+  parentId             String?                    @db.ObjectId
+  clientId             String                     @db.ObjectId
+  instanceId           String                     @db.ObjectId
+  parent               AccountAttributeValue?     @relation(name: "ChildActAttValues", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  childAttributeValues AccountAttributeValue[]    @relation("ChildActAttValues")
+  accountAttribute     AccountAttribute           @relation(fields: [attributeId], references: [id])
+  instance             Instance                   @relation(fields: [instanceId], references: [id])
+  AttributeAndValues   AccountAttributeAndValue[]
+  createdAt            DateTime?                  @default(now())
+  updatedAt            DateTime?                  @updatedAt
+
+  @@unique([clientId, code, instanceId, attributeId])
+}
+
+model AccountAttributeAndValue {
+  id               String                 @id @default(auto()) @map("_id") @db.ObjectId
+  accountId        String                 @db.ObjectId
+  clientId         String                 @db.ObjectId
+  instanceId       String                 @db.ObjectId
+  attributeId      String                 @db.ObjectId
+  attributeValueId String                 @db.ObjectId
+  account          Account?               @relation(fields: [accountId], references: [id])
+  attribute        AccountAttribute?      @relation(fields: [attributeId], references: [id])
+  attributeValue   AccountAttributeValue? @relation(fields: [attributeValueId], references: [id])
+  createdAt        DateTime?              @default(now())
+  updatedAt        DateTime?              @updatedAt
+}
+
+model Account {
+  id                    String                     @id @default(auto()) @map("_id") @db.ObjectId
+  code                  String
+  name                  String
+  isRoot                Boolean                    @default(false) // defines an account that must sit directly under "GL Accounts" or "Custom Accounts"
+  isModelRoot           Boolean                    @default(false) // defines an account that is a root account for a model
+  accountType           AccountType
+  accountTypeTag        AccountTypeTag
+  group                 YesNo                      @default(No) // defines an account that is a group of other accounts
+  plannedBy             ActPlanBy?
+  actualsBy             ActActualsBy?
+  displayAs             ActDisplayAs               @default(Currency)
+  containsSalaryInfo    YesNo                      @default(No)
+  description           String?
+  instanceId            String                     @db.ObjectId
+  instance              Instance                   @relation(fields: [instanceId], references: [id])
+  clientId              String                     @db.ObjectId
+  parentId              String?                    @db.ObjectId
+  parent                Account?                   @relation(name: "childAccounts", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  childAccounts         Account[]                  @relation("childAccounts")
+  AttributeAndValues    AccountAttributeAndValue[]
+  modelAccounts         ModelAccountStructure[]
+  modelData             ModelData[]
+  modeldataCalculations ModelDataCalculations[]
+  createdAt             DateTime?                  @default(now())
+  updatedAt             DateTime?                  @updatedAt
+
+  @@unique([clientId, code, instanceId])
+}
+
+model Dimension {
+  id                    String           @id @default(auto()) @map("_id") @db.ObjectId
+  code                  String
+  name                  String
+  description           String?
+  dimensionValueDefault String?          @db.ObjectId
+  clientId              String           @db.ObjectId
+  instanceId            String           @db.ObjectId
+  instance              Instance         @relation(fields: [instanceId], references: [id])
+  dimensionValues       DimensionValue[]
+  createdAt             DateTime?        @default(now())
+  updatedAt             DateTime?        @updatedAt
+
+  @@unique([clientId, code, instanceId])
+}
+
+model DimensionValue {
+  id                   String                            @id @default(auto()) @map("_id") @db.ObjectId
+  code                 String
+  name                 String
+  parentId             String?                           @db.ObjectId
+  clientId             String                            @db.ObjectId
+  instanceId           String                            @db.ObjectId
+  dimensionId          String                            @db.ObjectId
+  parent               DimensionValue?                   @relation(name: "ChildDimensionValues", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  childDimensionValues DimensionValue[]                  @relation("ChildDimensionValues")
+  AttributeAndValues   DimensionValueAttributeAndValue[]
+  instance             Instance                          @relation(fields: [instanceId], references: [id])
+  dimension            Dimension                         @relation(fields: [dimensionId], references: [id])
+  createdAt            DateTime?                         @default(now())
+  updatedAt            DateTime?                         @updatedAt
+
+  @@unique([clientId, code, instanceId, dimensionId])
+}
+
+model DimensionValueAttribute {
+  id                 String                            @id @default(auto()) @map("_id") @db.ObjectId
+  code               String
+  name               String
+  description        String?
+  clientId           String                            @db.ObjectId
+  instanceId         String                            @db.ObjectId
+  instance           Instance                          @relation(fields: [instanceId], references: [id])
+  AttributeValues    DimensionValueAttributeValue[]
+  AttributeAndValues DimensionValueAttributeAndValue[]
+  updatedAt          DateTime?                         @updatedAt
+  createdAt          DateTime?                         @default(now())
+
+  @@unique([clientId, code, instanceId])
+}
+
+model DimensionValueAttributeValue {
+  id                          String                            @id @default(auto()) @map("_id") @db.ObjectId
+  code                        String
+  name                        String
+  attributeId                 String                            @db.ObjectId
+  clientId                    String                            @db.ObjectId
+  parentId                    String?                           @db.ObjectId
+  instanceId                  String                            @db.ObjectId
+  instance                    Instance                          @relation(fields: [instanceId], references: [id])
+  parent                      DimensionValueAttributeValue?     @relation(name: "childAttributeValues", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  childAttributeValues        DimensionValueAttributeValue[]    @relation(name: "childAttributeValues")
+  dimensionValueAttribute     DimensionValueAttribute           @relation(fields: [attributeId], references: [id])
+  dimensionAttributeAndValues DimensionValueAttributeAndValue[]
+  createdAt                   DateTime?                         @default(now())
+  updatedAt                   DateTime?                         @updatedAt
+
+  @@unique([clientId, code, instanceId, attributeId])
+}
+
+model DimensionValueAttributeAndValue {
+  id               String                        @id @default(auto()) @map("_id") @db.ObjectId
+  clientId         String                        @db.ObjectId
+  instanceId       String                        @db.ObjectId
+  attributeId      String                        @db.ObjectId
+  attributeValueId String                        @db.ObjectId
+  dimensionValueId String                        @db.ObjectId
+  dimensionValue   DimensionValue?               @relation(fields: [dimensionValueId], references: [id])
+  attribute        DimensionValueAttribute?      @relation(fields: [attributeId], references: [id])
+  attributeValue   DimensionValueAttributeValue? @relation(fields: [attributeValueId], references: [id])
+  createdAt        DateTime?                     @default(now())
+  updatedAt        DateTime?                     @updatedAt
+}
+
+enum ModelStatus {
+  Active
+  Inactive
+}
+
+model Model {
+  id                    String                  @id @default(auto()) @map("_id") @db.ObjectId
+  code                  String
+  name                  String
+  description           String?
+  dimensionality        String[]
+  status                ModelStatus             @default(Active)
+  isDefault             Boolean                 @default(false) // default models generated by GridL that cannot be modified or deleted
+  instanceId            String                  @db.ObjectId
+  clientId              String                  @db.ObjectId
+  createdAt             DateTime?               @default(now())
+  updatedAt             DateTime?               @updatedAt
+  rootAccountId         String                  @db.ObjectId
+  instance              Instance                @relation(fields: [instanceId], references: [id])
+  modelData             ModelData[]
+  modelAccounts         ModelAccountStructure[]
+  modelDataCalculations ModelDataCalculations[]
+
+  @@unique([clientId, instanceId, code])
+}
+
+model ModelAccountStructure {
+  id                    String                  @id @default(auto()) @map("_id") @db.ObjectId
+  instanceId            String                  @db.ObjectId
+  instance              Instance                @relation(fields: [instanceId], references: [id])
+  isRoot                Boolean                 @default(false)
+  clientId              String                  @db.ObjectId
+  parentId              String?                 @db.ObjectId
+  modelId               String                  @db.ObjectId
+  model                 Model                   @relation(fields: [modelId], references: [id])
+  accountId             String                  @db.ObjectId
+  account               Account                 @relation(fields: [accountId], references: [id])
+  createdAt             DateTime?               @default(now())
+  updatedAt             DateTime?               @updatedAt
+  modeldataCalculations ModelDataCalculations[]
+  parentAccount         ModelAccountStructure?  @relation(name: "childAccounts", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  childAccounts         ModelAccountStructure[] @relation("childAccounts")
+}
+
+type ModelDataDimensionality {
+  dimensionId      String
+  dimensionValueId String
+}
+
+model ModelData {
+  id             String                    @id @default(auto()) @map("_id") @db.ObjectId
+  clientId       String                    @db.ObjectId
+  instanceId     String                    @db.ObjectId
+  modelId        String                    @db.ObjectId
+  versionId      String                    @db.ObjectId
+  levelId        String                    @db.ObjectId
+  accountId      String                    @db.ObjectId
+  dimensionality ModelDataDimensionality[]
+  timespan       Json
+  createdAt      DateTime?                 @default(now())
+  updatedAt      DateTime?                 @updatedAt
+  model          Model                     @relation(fields: [modelId], references: [id])
+  level          Level                     @relation(fields: [levelId], references: [id])
+  account        Account                   @relation(fields: [accountId], references: [id])
+  version        Version                   @relation(fields: [versionId], references: [id])
+  instance       Instance                  @relation(fields: [instanceId], references: [id])
+}
+
+model ModelDataCalculations {
+  id             String                @id @default(auto()) @map("_id") @db.ObjectId
+  clientId       String                @db.ObjectId
+  instanceId     String                @db.ObjectId
+  modelId        String                @db.ObjectId
+  versionId      String                @db.ObjectId
+  levelId        String                @db.ObjectId
+  accountId      String                @db.ObjectId
+  modelAccountId String                @db.ObjectId
+  calculations   Json
+  createdAt      DateTime?             @default(now())
+  updatedAt      DateTime?             @updatedAt
+  model          Model                 @relation(fields: [modelId], references: [id])
+  level          Level                 @relation(fields: [levelId], references: [id])
+  account        Account               @relation(fields: [accountId], references: [id])
+  version        Version               @relation(fields: [versionId], references: [id])
+  instance       Instance              @relation(fields: [instanceId], references: [id])
+  modelAccount   ModelAccountStructure @relation(fields: [modelAccountId], references: [id])
+}
+
+enum TableColumnType {
+  Text
+  Number
+  Date
+  Checkbox
+  Dimension
+}
+
+type TableColumnDefinition {
+  tableId     String          @db.ObjectId
+  name        String
+  code        String
+  type        TableColumnType
+  dimensionId String?
+}
+
+model Table {
+  id                String                  @id @default(auto()) @map("_id") @db.ObjectId
+  clientId          String                  @db.ObjectId
+  instanceId        String                  @db.ObjectId
+  name              String
+  code              String
+  description       String?
+  createdAt         DateTime?               @default(now())
+  updatedAt         DateTime?               @updatedAt
+  instance          Instance                @relation(fields: [instanceId], references: [id])
+  tableData         TableData[]
+  status            ModelStatus
+  columnDefinitions TableColumnDefinition[]
+
+  @@unique([clientId, instanceId, code])
+}
+
+model TableData {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  clientId   String    @db.ObjectId
+  instanceId String    @db.ObjectId
+  tableId    String    @db.ObjectId
+  rowKey     String    @unique
+  versionId  String    @db.ObjectId
+  levelId    String    @db.ObjectId
+  data       Json
+  table      Table     @relation(fields: [tableId], references: [id])
+  instance   Instance  @relation(fields: [instanceId], references: [id])
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+}
+
+enum DataSourceType {
+  CSV
+  Excel
+  Quickbooks
+  JSON
+  NetSuite
+  Adaptive
+}
+
+enum DatasourceCredentialAuthType {
+  Basic
+  PrivateKey
+}
+
+model DataSource {
+  id           String                @id @default(auto()) @map("_id") @db.ObjectId
+  clientId     String                @db.ObjectId
+  instanceId   String                @db.ObjectId
+  name         String
+  code         String
+  credentialId String?               @db.ObjectId
+  credential   DataSourceCredential? @relation(fields: [credentialId], references: [id])
+  description  String?
+  type         DataSourceType
+  createdAt    DateTime?             @default(now())
+  updatedAt    DateTime?             @updatedAt
+
+  @@unique([clientId, instanceId, code])
+}
+
+model DataSourceTask {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  clientId    String    @db.ObjectId
+  instanceId  String    @db.ObjectId
+  name        String
+  code        String
+  description String?
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @updatedAt
+
+  @@unique([clientId, instanceId, code])
+}
+
+enum DataSourceLoaderType {
+  Level
+  Account
+  Dimension
+  Attribute
+  Planning
+}
+
+model DataSourceLoader {
+  id                      String               @id @default(auto()) @map("_id") @db.ObjectId
+  clientId                String               @db.ObjectId
+  instanceId              String               @db.ObjectId
+  name                    String
+  code                    String
+  loaderType              DataSourceLoaderType
+  sourceTable             String?
+  planningTable           String[]
+  planningElementId       String               @db.ObjectId
+  planningElementType     String
+  versionId               String               @db.ObjectId
+  createElementIfNotFound Boolean?
+  settingsOptions         Json?
+  columnMappings          Json?
+  description             String?
+  createdAt               DateTime?            @default(now())
+  updatedAt               DateTime?            @updatedAt
+
+  @@unique([clientId, instanceId, code])
+}
+
+model DataSourceCredential {
+  id                    String                       @id @default(auto()) @map("_id") @db.ObjectId
+  clientId              String                       @db.ObjectId
+  instanceId            String                       @db.ObjectId
+  name                  String
+  code                  String
+  datasources           DataSource[]
+  description           String?
+  type                  DatasourceCredentialAuthType
+  credentialId          String?
+  credentialKey         String?
+  credentialSecret      String?
+  credentialToken       String?
+  credentialTokenSecret String?
+  credentialHostname    String?
+  credentialUsername    String?
+  fingerprint           String?
+  createdAt             DateTime?                    @default(now())
+  updatedAt             DateTime?                    @updatedAt
+
+  @@unique([clientId, instanceId, code])
+}

@@ -1,0 +1,29 @@
+{
+  "name": "types",
+  "version": "0.0.1",
+  "description": "Global type definitions used across the GridL front-end and backend api",
+  "homepage": "https://github.com/GridL-Development/types#readme",
+  "bugs": {
+    "url": "https://github.com/GridL-Development/types/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GridL-Development/types.git"
+  },
+  "license": "ISC",
+  "author": "Jose L. Velez",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "prisma": {
+    "schema": "src/prisma/schema.prisma"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.3.1"
+  },
+  "devDependencies": {
+    "prisma": "^6.3.1"
+  }
+}
