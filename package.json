@@ -1,14 +1,14 @@
 {
-  "name": "types",
+  "name": "gridl_core",
   "version": "0.0.1",
-  "description": "Global type definitions used across the GridL front-end and backend api",
-  "homepage": "https://github.com/GridL-Development/types#readme",
+  "description": "Core items used across the GridL front-end and backend api",
+  "homepage": "https://github.com/GridL-Development/gridl_core#readme",
   "bugs": {
-    "url": "https://github.com/GridL-Development/types/issues"
+    "url": "https://github.com/GridL-Development/gridl_core/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GridL-Development/types.git"
+    "url": "git+https://github.com/GridL-Development/gridl_core.git"
   },
   "license": "ISC",
   "author": "Jose L. Velez",
