@@ -383,6 +383,13 @@ export interface APIResponseModelArray extends APIResponseType {
   data: Model[];
 }
 
+export interface APIResponseSheets extends APIResponseType {
+  data: {
+    models: Model[];
+    tables: Table[];
+  };
+}
+
 export interface APIResponseTable extends APIResponseType {
   data: Table;
 }
