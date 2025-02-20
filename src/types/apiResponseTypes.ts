@@ -49,6 +49,7 @@ import {
   LevelWithCurrencyPathAndParent,
   LoaderColumnMappingType,
   ModelAccountStructureWithAccount,
+  Sheet,
   SourceTableColumnProperty,
   TreeSelectDataNode,
   UserExtended,
@@ -384,10 +385,7 @@ export interface APIResponseModelArray extends APIResponseType {
 }
 
 export interface APIResponseSheets extends APIResponseType {
-  data: {
-    models: Model[];
-    tables: Table[];
-  };
+  data: Sheet[];
 }
 
 export interface APIResponseTable extends APIResponseType {
