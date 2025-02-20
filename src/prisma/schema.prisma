@@ -119,7 +119,7 @@ model Instance {
   versions                      Version[]
   currencies                    Currency[]
   accounts                      Account[]
-  models                        Model[]
+  cubes                         Cube[]
   dimensions                    Dimension[]
   dimensionValues               DimensionValue[]
   levelAttributes               LevelAttribute[]
@@ -128,9 +128,9 @@ model Instance {
   levelAttValues                LevelAttributeValue[]
   accountAttValues              AccountAttributeValue[]
   dimensionValueAttributeValues DimensionValueAttributeValue[]
-  modelData                     ModelData[]
-  modelDataCalculations         ModelDataCalculations[]
-  modelAccounts                 ModelAccountStructure[]
+  cubeData                      CubeData[]
+  cubeDataCalculations          CubeDataCalculations[]
+  cubeAccounts                  CubeAccountStructure[]
   tables                        Table[]
   tableData                     TableData[]
   createdAt                     DateTime?                      @default(now())
@@ -146,23 +146,23 @@ enum versionStatus {
 }
 
 model Version {
-  id                    String                  @id @default(auto()) @map("_id") @db.ObjectId
-  code                  String
-  name                  String
-  begin                 DateTime
-  end                   DateTime
-  startOfPlan           DateTime
-  description           String?
-  isDefault             Boolean                 @default(false)
-  isActuals             Boolean                 @default(false)
-  status                versionStatus           @default(Unlocked)
-  clientId              String                  @db.ObjectId
-  instanceId            String                  @db.ObjectId
-  instance              Instance                @relation(fields: [instanceId], references: [id])
-  createdAt             DateTime?               @default(now())
-  updatedAt             DateTime?               @updatedAt
-  modelData             ModelData[]
-  modelDataCalculations ModelDataCalculations[]
+  id                   String                 @id @default(auto()) @map("_id") @db.ObjectId
+  code                 String
+  name                 String
+  begin                DateTime
+  end                  DateTime
+  startOfPlan          DateTime
+  description          String?
+  isDefault            Boolean                @default(false)
+  isActuals            Boolean                @default(false)
+  status               versionStatus          @default(Unlocked)
+  clientId             String                 @db.ObjectId
+  instanceId           String                 @db.ObjectId
+  instance             Instance               @relation(fields: [instanceId], references: [id])
+  createdAt            DateTime?              @default(now())
+  updatedAt            DateTime?              @updatedAt
+  cubeData             CubeData[]
+  cubeDataCalculations CubeDataCalculations[]
 
   @@unique([clientId, code, instanceId])
 }
@@ -199,24 +199,24 @@ model Currency {
 }
 
 model Level {
-  id                    String                   @id @default(auto()) @map("_id") @db.ObjectId
-  code                  String
-  name                  String
-  isRoot                Boolean                  @default(false)
-  description           String?
-  parentId              String?                  @db.ObjectId
-  clientId              String                   @db.ObjectId
-  AttributeAndValues    LevelAttributeAndValue[]
-  parent                Level?                   @relation(name: "ChildLevels", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  instanceId            String                   @db.ObjectId
-  instance              Instance                 @relation(fields: [instanceId], references: [id])
-  currencyId            String                   @db.ObjectId
-  currency              Currency                 @relation(fields: [currencyId], references: [id])
-  childLevels           Level[]                  @relation("ChildLevels")
-  modelData             ModelData[]
-  modeldataCalculations ModelDataCalculations[]
-  createdAt             DateTime?                @default(now())
-  updatedAt             DateTime?                @updatedAt
+  id                   String                   @id @default(auto()) @map("_id") @db.ObjectId
+  code                 String
+  name                 String
+  isRoot               Boolean                  @default(false)
+  description          String?
+  parentId             String?                  @db.ObjectId
+  clientId             String                   @db.ObjectId
+  AttributeAndValues   LevelAttributeAndValue[]
+  parent               Level?                   @relation(name: "ChildLevels", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  instanceId           String                   @db.ObjectId
+  instance             Instance                 @relation(fields: [instanceId], references: [id])
+  currencyId           String                   @db.ObjectId
+  currency             Currency                 @relation(fields: [currencyId], references: [id])
+  childLevels          Level[]                  @relation("ChildLevels")
+  cubeData             CubeData[]
+  cubeDataCalculations CubeDataCalculations[]
+  createdAt            DateTime?                @default(now())
+  updatedAt            DateTime?                @updatedAt
 
   @@unique(fields: [clientId, code, instanceId], name: "uniqueCode")
 }
@@ -356,31 +356,31 @@ model AccountAttributeAndValue {
 }
 
 model Account {
-  id                    String                     @id @default(auto()) @map("_id") @db.ObjectId
-  code                  String
-  name                  String
-  isRoot                Boolean                    @default(false) // defines an account that must sit directly under "GL Accounts" or "Custom Accounts"
-  isModelRoot           Boolean                    @default(false) // defines an account that is a root account for a model
-  accountType           AccountType
-  accountTypeTag        AccountTypeTag
-  group                 YesNo                      @default(No) // defines an account that is a group of other accounts
-  plannedBy             ActPlanBy?
-  actualsBy             ActActualsBy?
-  displayAs             ActDisplayAs               @default(Currency)
-  containsSalaryInfo    YesNo                      @default(No)
-  description           String?
-  instanceId            String                     @db.ObjectId
-  instance              Instance                   @relation(fields: [instanceId], references: [id])
-  clientId              String                     @db.ObjectId
-  parentId              String?                    @db.ObjectId
-  parent                Account?                   @relation(name: "childAccounts", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  childAccounts         Account[]                  @relation("childAccounts")
-  AttributeAndValues    AccountAttributeAndValue[]
-  modelAccounts         ModelAccountStructure[]
-  modelData             ModelData[]
-  modeldataCalculations ModelDataCalculations[]
-  createdAt             DateTime?                  @default(now())
-  updatedAt             DateTime?                  @updatedAt
+  id                   String                     @id @default(auto()) @map("_id") @db.ObjectId
+  code                 String
+  name                 String
+  isRoot               Boolean                    @default(false) // defines an account that must sit directly under "GL Accounts" or "Custom Accounts"
+  isModelRoot          Boolean                    @default(false) // defines an account that is a root account for a model
+  accountType          AccountType
+  accountTypeTag       AccountTypeTag
+  group                YesNo                      @default(No) // defines an account that is a group of other accounts
+  plannedBy            ActPlanBy?
+  actualsBy            ActActualsBy?
+  displayAs            ActDisplayAs               @default(Currency)
+  containsSalaryInfo   YesNo                      @default(No)
+  description          String?
+  instanceId           String                     @db.ObjectId
+  instance             Instance                   @relation(fields: [instanceId], references: [id])
+  clientId             String                     @db.ObjectId
+  parentId             String?                    @db.ObjectId
+  parent               Account?                   @relation(name: "childAccounts", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  childAccounts        Account[]                  @relation("childAccounts")
+  AttributeAndValues   AccountAttributeAndValue[]
+  cubeAccounts         CubeAccountStructure[]
+  cubeData             CubeData[]
+  cubeDataCalculations CubeDataCalculations[]
+  createdAt            DateTime?                  @default(now())
+  updatedAt            DateTime?                  @updatedAt
 
   @@unique([clientId, code, instanceId])
 }
@@ -469,92 +469,97 @@ model DimensionValueAttributeAndValue {
   updatedAt        DateTime?                     @updatedAt
 }
 
-enum ModelStatus {
+enum CubeStatus {
   Active
   Inactive
 }
 
-model Model {
-  id                    String                  @id @default(auto()) @map("_id") @db.ObjectId
-  code                  String
-  name                  String
-  description           String?
-  dimensionality        String[]
-  status                ModelStatus             @default(Active)
-  isDefault             Boolean                 @default(false) // default models generated by GridL that cannot be modified or deleted
-  instanceId            String                  @db.ObjectId
-  clientId              String                  @db.ObjectId
-  createdAt             DateTime?               @default(now())
-  updatedAt             DateTime?               @updatedAt
-  rootAccountId         String                  @db.ObjectId
-  instance              Instance                @relation(fields: [instanceId], references: [id])
-  modelData             ModelData[]
-  modelAccounts         ModelAccountStructure[]
-  modelDataCalculations ModelDataCalculations[]
+enum TableStatus {
+  Active
+  Inactive
+}
+
+model Cube {
+  id                   String                 @id @default(auto()) @map("_id") @db.ObjectId
+  code                 String
+  name                 String
+  description          String?
+  dimensionality       String[]
+  status               CubeStatus             @default(Active)
+  isDefault            Boolean                @default(false) // default models generated by GridL that cannot be modified or deleted
+  instanceId           String                 @db.ObjectId
+  clientId             String                 @db.ObjectId
+  createdAt            DateTime?              @default(now())
+  updatedAt            DateTime?              @updatedAt
+  rootAccountId        String                 @db.ObjectId
+  instance             Instance               @relation(fields: [instanceId], references: [id])
+  cubeData             CubeData[]
+  cubeAccounts         CubeAccountStructure[]
+  cubeDataCalculations CubeDataCalculations[]
 
   @@unique([clientId, instanceId, code])
 }
 
-model ModelAccountStructure {
-  id                    String                  @id @default(auto()) @map("_id") @db.ObjectId
-  instanceId            String                  @db.ObjectId
-  instance              Instance                @relation(fields: [instanceId], references: [id])
-  isRoot                Boolean                 @default(false)
-  clientId              String                  @db.ObjectId
-  parentId              String?                 @db.ObjectId
-  modelId               String                  @db.ObjectId
-  model                 Model                   @relation(fields: [modelId], references: [id])
-  accountId             String                  @db.ObjectId
-  account               Account                 @relation(fields: [accountId], references: [id])
-  createdAt             DateTime?               @default(now())
-  updatedAt             DateTime?               @updatedAt
-  modeldataCalculations ModelDataCalculations[]
-  parentAccount         ModelAccountStructure?  @relation(name: "childAccounts", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  childAccounts         ModelAccountStructure[] @relation("childAccounts")
+model CubeAccountStructure {
+  id                   String                 @id @default(auto()) @map("_id") @db.ObjectId
+  instanceId           String                 @db.ObjectId
+  instance             Instance               @relation(fields: [instanceId], references: [id])
+  isRoot               Boolean                @default(false)
+  clientId             String                 @db.ObjectId
+  parentId             String?                @db.ObjectId
+  cubeId               String                 @db.ObjectId
+  cube                 Cube                   @relation(fields: [cubeId], references: [id])
+  accountId            String                 @db.ObjectId
+  account              Account                @relation(fields: [accountId], references: [id])
+  createdAt            DateTime?              @default(now())
+  updatedAt            DateTime?              @updatedAt
+  cubeDataCalculations CubeDataCalculations[]
+  parentAccount        CubeAccountStructure?  @relation(name: "childAccounts", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  childAccounts        CubeAccountStructure[] @relation("childAccounts")
 }
 
-type ModelDataDimensionality {
+type CubeDataDimensionality {
   dimensionId      String
   dimensionValueId String
 }
 
-model ModelData {
-  id             String                    @id @default(auto()) @map("_id") @db.ObjectId
-  clientId       String                    @db.ObjectId
-  instanceId     String                    @db.ObjectId
-  modelId        String                    @db.ObjectId
-  versionId      String                    @db.ObjectId
-  levelId        String                    @db.ObjectId
-  accountId      String                    @db.ObjectId
-  dimensionality ModelDataDimensionality[]
+model CubeData {
+  id             String                   @id @default(auto()) @map("_id") @db.ObjectId
+  clientId       String                   @db.ObjectId
+  instanceId     String                   @db.ObjectId
+  cubeId         String                   @db.ObjectId
+  versionId      String                   @db.ObjectId
+  levelId        String                   @db.ObjectId
+  accountId      String                   @db.ObjectId
+  dimensionality CubeDataDimensionality[]
   timespan       Json
-  createdAt      DateTime?                 @default(now())
-  updatedAt      DateTime?                 @updatedAt
-  model          Model                     @relation(fields: [modelId], references: [id])
-  level          Level                     @relation(fields: [levelId], references: [id])
-  account        Account                   @relation(fields: [accountId], references: [id])
-  version        Version                   @relation(fields: [versionId], references: [id])
-  instance       Instance                  @relation(fields: [instanceId], references: [id])
+  createdAt      DateTime?                @default(now())
+  updatedAt      DateTime?                @updatedAt
+  cube           Cube                     @relation(fields: [cubeId], references: [id])
+  level          Level                    @relation(fields: [levelId], references: [id])
+  account        Account                  @relation(fields: [accountId], references: [id])
+  version        Version                  @relation(fields: [versionId], references: [id])
+  instance       Instance                 @relation(fields: [instanceId], references: [id])
 }
 
-model ModelDataCalculations {
-  id             String                @id @default(auto()) @map("_id") @db.ObjectId
-  clientId       String                @db.ObjectId
-  instanceId     String                @db.ObjectId
-  modelId        String                @db.ObjectId
-  versionId      String                @db.ObjectId
-  levelId        String                @db.ObjectId
-  accountId      String                @db.ObjectId
-  modelAccountId String                @db.ObjectId
-  calculations   Json
-  createdAt      DateTime?             @default(now())
-  updatedAt      DateTime?             @updatedAt
-  model          Model                 @relation(fields: [modelId], references: [id])
-  level          Level                 @relation(fields: [levelId], references: [id])
-  account        Account               @relation(fields: [accountId], references: [id])
-  version        Version               @relation(fields: [versionId], references: [id])
-  instance       Instance              @relation(fields: [instanceId], references: [id])
-  modelAccount   ModelAccountStructure @relation(fields: [modelAccountId], references: [id])
+model CubeDataCalculations {
+  id            String               @id @default(auto()) @map("_id") @db.ObjectId
+  clientId      String               @db.ObjectId
+  instanceId    String               @db.ObjectId
+  cubeId        String               @db.ObjectId
+  versionId     String               @db.ObjectId
+  levelId       String               @db.ObjectId
+  accountId     String               @db.ObjectId
+  cubeAccountId String               @db.ObjectId
+  calculations  Json
+  createdAt     DateTime?            @default(now())
+  updatedAt     DateTime?            @updatedAt
+  cube          Cube                 @relation(fields: [cubeId], references: [id])
+  level         Level                @relation(fields: [levelId], references: [id])
+  account       Account              @relation(fields: [accountId], references: [id])
+  version       Version              @relation(fields: [versionId], references: [id])
+  instance      Instance             @relation(fields: [instanceId], references: [id])
+  cubeAccount   CubeAccountStructure @relation(fields: [cubeAccountId], references: [id])
 }
 
 enum TableColumnType {
@@ -584,7 +589,7 @@ model Table {
   updatedAt         DateTime?               @updatedAt
   instance          Instance                @relation(fields: [instanceId], references: [id])
   tableData         TableData[]
-  status            ModelStatus
+  status            TableStatus
   columnDefinitions TableColumnDefinition[]
 
   @@unique([clientId, instanceId, code])

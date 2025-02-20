@@ -25,12 +25,12 @@ import {
   LevelAttribute,
   LevelAttributeAndValue,
   LevelAttributeValue,
-  ModelAccountStructure,
-  ModelData,
+  CubeData,
   User,
   Version,
+  CubeAccountStructure,
 } from "@prisma/client";
-import { SheetType } from "../constants";
+import { GridType } from "../constants";
 
 export type PagePropsWithSearchParamsAndParams = {
   params: Promise<{ [key: string]: string | string[] }>;
@@ -201,20 +201,20 @@ export interface LoaderColumnMappingType {
   } & Record<string, any>)[];
 }
 
-export interface ModelAccount {
+export interface CubeAccount {
   id: string;
   code: string;
   name: string;
-  modelId: string;
+  cubeId: string;
   parentId: string | undefined;
   accountId: string;
   accountTypeTag: AccountTypeTag;
 }
 
-export interface ModelAccountStructureWithAccount {
+export interface CubeAccountStructureWithAccount {
   id: string;
   isRoot: boolean;
-  modelId: string;
+  cubeId: string;
   parentId: string | null;
   accountId: string;
   account: {
@@ -226,22 +226,22 @@ export interface ModelAccountStructureWithAccount {
   };
 }
 
-export interface ModelAccountStructureWithCodeAndName
-  extends ModelAccountStructure {
+export interface CubeAccountStructureWithCodeAndName
+  extends CubeAccountStructure {
   code: string;
   name: string;
   accountTypeTag: AccountTypeTag;
 }
 
-export interface modelDataType {
+export interface CubeDataType {
   clientId: string;
   instanceId: string;
-  modelId: string;
+  cubeId: string;
   versionId: string;
-  rowData: modelDataRowType[];
+  rowData: CubeDataRowType[];
 }
 
-export interface modelDataRowType {
+export interface CubeDataRowType {
   id?: string;
   levelId?: string;
   accountId?: string;
@@ -249,7 +249,7 @@ export interface modelDataRowType {
   timespan: Record<number, Record<number, { value: number }>>[];
 }
 
-export interface ModelDimensionWithDimensionValuesData {
+export interface CubeDimensionWithDimensionValuesData {
   id: string;
   name: string;
   code: string;
@@ -257,7 +257,7 @@ export interface ModelDimensionWithDimensionValuesData {
   dimensionValueId: string;
 }
 
-export interface ModelDataWithLevelAndAccount extends ModelData {
+export interface CubeDataWithLevelAndAccount extends CubeData {
   level: {
     name: string;
   };
@@ -270,13 +270,13 @@ export interface ModelDataWithLevelAndAccount extends ModelData {
   }[];
 }
 
-export interface Sheet {
+export interface Grid {
+  _id: string;
+  name: string;
+  code: string;
   id: string;
-  modelName: string;
-  modelCode: string;
-  modelId: string;
   status: string;
-  type: SheetType;
+  type: GridType;
   description: string | null;
   lastModified: Date;
 }

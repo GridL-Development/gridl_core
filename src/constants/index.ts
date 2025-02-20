@@ -93,15 +93,15 @@ export const expectedColumnsForImportLevel = [
   "description",
 ];
 
-// Models
-export const model_table_status = [
+// Cubes
+export const cube_table_status = [
   { value: "Active", label: "Active" },
   { value: "Inactive", label: "Inactive" },
 ];
 
-// Sheets
-export enum SheetType {
-  Model = "Model",
+// Grids
+export enum GridType {
+  Model = "Cube",
   Table = "Table",
 }
 

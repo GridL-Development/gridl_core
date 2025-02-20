@@ -5,6 +5,7 @@ import {
   AccountAttribute,
   AccountAttributeValue,
   Client,
+  Cube,
   Currency,
   CurrencyIsoCode,
   DataSource,
@@ -19,7 +20,6 @@ import {
   Level,
   LevelAttribute,
   LevelAttributeValue,
-  Model,
   Table,
   User,
   Version,
@@ -48,13 +48,13 @@ import {
   LevelWithCurrencyParentChildLevelsAttributesAndValues,
   LevelWithCurrencyPathAndParent,
   LoaderColumnMappingType,
-  ModelAccountStructureWithAccount,
-  Sheet,
+  Grid,
   SourceTableColumnProperty,
   TreeSelectDataNode,
   UserExtended,
   ValueLabelType,
   ValueLabelTypeWithChildren,
+  CubeAccountStructureWithAccount,
 } from "./commonTypes";
 
 export interface APIResponseType {
@@ -358,35 +358,35 @@ export interface APIResponseLoaderColumnMappingType extends APIResponseType {
   data: LoaderColumnMappingType;
 }
 
-export interface APIResponseModel extends APIResponseType {
-  data: Model;
+export interface APIResponseCube extends APIResponseType {
+  data: Cube;
 }
 
-export interface APIResponseModelArray extends APIResponseType {
-  data: Model[];
+export interface APIResponseCubeArray extends APIResponseType {
+  data: Cube[];
 }
 
-export interface APIResponseModelData extends APIResponseType {
+export interface APIResponseCubeData extends APIResponseType {
   data: any;
 }
 
-export interface APIResponseModelAccountStructureWithAccount
+export interface APIResponseCubeAccountStructureWithAccount
   extends APIResponseType {
-  data: ModelAccountStructureWithAccount;
+  data: CubeAccountStructureWithAccount;
 }
 
-export interface APIResponseModelAccountStructureWithAccountArray
+export interface APIResponseCubeAccountStructureWithAccountArray
   extends APIResponseType {
-  data: ModelAccountStructureWithAccount[];
+  data: CubeAccountStructureWithAccount[];
 }
 
-export interface APIResponseModelArray extends APIResponseType {
-  data: Model[];
+export interface APIResponseCubeArray extends APIResponseType {
+  data: Cube[];
 }
 
-export interface APIResponseSheets extends APIResponseType {
+export interface APIResponseGrids extends APIResponseType {
   data: {
-    sheets: Sheet[];
+    grids: Grid[];
     clientId: string;
     instanceId: string;
     versionId: string;
