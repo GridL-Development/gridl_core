@@ -390,7 +390,6 @@ export interface APIResponseSheets extends APIResponseType {
     clientId: string;
     instanceId: string;
     versionId: string;
-    modelId: string;
     rootLevelId: string;
   };
 }
