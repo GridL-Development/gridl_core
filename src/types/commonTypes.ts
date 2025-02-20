@@ -281,10 +281,6 @@ export interface Sheet {
   lastModified: Date;
 }
 
-export interface Sheets {
-  sheets: Sheet[];
-}
-
 export interface SourceTableColumnProperty {
   columnKey: string;
   dataType: string;
