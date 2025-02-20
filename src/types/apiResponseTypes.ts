@@ -385,7 +385,14 @@ export interface APIResponseModelArray extends APIResponseType {
 }
 
 export interface APIResponseSheets extends APIResponseType {
-  data: Sheet[];
+  data: {
+    sheets: Sheet[];
+    clientId: string;
+    instanceId: string;
+    versionId: string;
+    modelId: string;
+    rootLevelId: string;
+  };
 }
 
 export interface APIResponseTable extends APIResponseType {
