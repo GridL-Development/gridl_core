@@ -99,6 +99,12 @@ export const model_table_status = [
   { value: "Inactive", label: "Inactive" },
 ];
 
+// Sheets
+export enum SheetType {
+  Model = "Model",
+  Table = "Table",
+}
+
 // Versions
 export const versionStatus = [
   { value: "Locked", label: "Locked" },

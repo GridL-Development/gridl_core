@@ -30,6 +30,7 @@ import {
   User,
   Version,
 } from "@prisma/client";
+import { SheetType } from "../constants";
 
 export type PagePropsWithSearchParamsAndParams = {
   params: Promise<{ [key: string]: string | string[] }>;
@@ -267,6 +268,21 @@ export interface ModelDataWithLevelAndAccount extends ModelData {
     dimensionId: string;
     dimensionValueId: string;
   }[];
+}
+
+export interface Sheet {
+  id: string;
+  modelName: string;
+  modelCode: string;
+  modelId: string;
+  status: string;
+  type: SheetType;
+  description: string | null;
+  lastModified: Date;
+}
+
+export interface Sheets {
+  sheets: Sheet[];
 }
 
 export interface SourceTableColumnProperty {
