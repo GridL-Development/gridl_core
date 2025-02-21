@@ -101,7 +101,7 @@ export const cube_table_status = [
 
 // Grids
 export enum GridType {
-  Model = "Cube",
+  Cube = "Cube",
   Table = "Table",
 }
 
