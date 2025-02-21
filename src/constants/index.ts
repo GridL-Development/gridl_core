@@ -15,7 +15,7 @@ export const accountTypeTagDisplayMap = {
   PnL: "P&L",
   BalanceSheet: "Balance Sheet",
   Custom: "Custom",
-  Model: "Model",
+  Cube: "Cube",
 };
 
 // Alerts
