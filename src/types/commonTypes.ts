@@ -271,7 +271,7 @@ export interface CubeDataWithLevelAndAccount extends CubeData {
 }
 
 export interface Grid {
-  _id: string;
+  _id?: string;
   name: string;
   code: string;
   id: string;
