@@ -270,6 +270,12 @@ export interface CubeDataWithLevelAndAccount extends CubeData {
   }[];
 }
 
+export interface CubeVersionData {
+  timespanColumns: { headerName: string; monthNumber: number; year: number }[];
+  availableVersions: Version[];
+  selectedVersion: Version | null;
+}
+
 export interface Grid {
   _id?: string;
   name: string;
