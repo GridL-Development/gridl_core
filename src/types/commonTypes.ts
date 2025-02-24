@@ -257,6 +257,12 @@ export interface CubeDimensionWithDimensionValuesData {
   dimensionValueId: string;
 }
 
+export interface CubeObjForGrid {
+  name: string;
+  dimensionality: string[];
+  dimensions: Dimension[];
+}
+
 export interface CubeDataWithLevelAndAccount extends CubeData {
   level: {
     name: string;
