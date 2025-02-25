@@ -81,7 +81,6 @@ export interface CSVCubeDataImportContext {
   instanceId: string;
   cubeId: string;
   versionId: string;
-  importMethod: "update" | "append" | "update-append";
 }
 
 export interface CurrencyWithCurrencyIsoCode extends Currency {
