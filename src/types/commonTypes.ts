@@ -76,6 +76,13 @@ export interface CSVLevelImportContext {
   instanceId: string;
 }
 
+export interface CSVCubeDataImportContext {
+  clientId: string;
+  instanceId: string;
+  cubeId: string;
+  versionId: string;
+}
+
 export interface CurrencyWithCurrencyIsoCode extends Currency {
   currencyIsoCode: CurrencyIsoCode;
 }
