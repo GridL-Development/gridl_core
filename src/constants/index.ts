@@ -76,6 +76,17 @@ export const requiredColumnsLevel = [
   "description",
 ];
 
+export const requiredColumnsAccount = [
+  "name",
+  "code",
+  "parent",
+  "description",
+  "accountType",
+  "displayAs",
+  "containsSalaryInfo",
+  "accountTypeTag",
+];
+
 export const datasourceTableTypes = [
   { label: "Symbolic", value: "Symbolic" },
   { label: "Union", value: "Union" },
