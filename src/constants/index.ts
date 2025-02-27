@@ -98,6 +98,7 @@ export const expectedColumnsForImportAccount = [
   "parent",
   "description",
   "accountType",
+  "accountTypeTag",
   "displayAs",
   "containsSalaryInfo",
 ];
