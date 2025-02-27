@@ -92,6 +92,26 @@ export const expectedColumnsForImportLevel = [
   "currency",
   "description",
 ];
+export const expectedColumnsForImportAccount = [
+  "name",
+  "code",
+  "parent",
+  "description",
+  "accountType",
+  "displayAs",
+  "containsSalaryInfo",
+];
+export const expectedColumnsForImportDimension = [
+  "name",
+  "code",
+  "description",
+];
+export const expectedColumnsForImportDimensionValue = [
+  "name",
+  "code",
+  "dimensionCode",
+  "description",
+];
 
 // Cubes
 export const cube_table_status = [
