@@ -67,13 +67,21 @@ export interface ClientWithCountry extends Client {
   country: Country;
 }
 
+export interface CSVAccountImportContext {
+  clientId: string;
+  instanceId: string;
+  existingCodes: Set<string>;
+  existingNames: Set<string>;
+  parentCodeToId: Map<string, string>;
+}
+
 export interface CSVLevelImportContext {
+  clientId: string;
+  instanceId: string;
   existingCodes: Set<string>;
   existingNames: Set<string>;
   currencyCodeToId: Map<string, string>;
   parentCodeToId: Map<string, string>;
-  clientId: string;
-  instanceId: string;
 }
 
 export interface CSVCubeDataImportContext {
