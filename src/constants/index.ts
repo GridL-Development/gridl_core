@@ -108,10 +108,10 @@ export const expectedColumnsForImportAccount = [
   "code",
   "parent",
   "description",
-  "accountType",
-  "accountTypeTag",
-  "displayAs",
-  "containsSalaryInfo",
+  "account_type",
+  "account_type_tag",
+  "display_as",
+  "contains_salary_info",
 ];
 export const expectedColumnsForImportDimension = [
   "name",
