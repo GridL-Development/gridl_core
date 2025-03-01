@@ -50,6 +50,14 @@ export const integrationDataTypes = [
   },
 ];
 
+export const requiredColumnsForImportDimensionImport = ["name", "code"];
+
+export const requiredColumnsForImportDimensionValueImport = [
+  "name",
+  "code",
+  "dimensionCode",
+];
+
 export const requiredColumnsForLevelImport = [
   "name",
   "code",
@@ -67,20 +75,6 @@ export const datasourceTableTypes = [
 // Misc / Uncategorized
 export const constSchemasCollectionName = "table_schemas";
 export const constLinkTablesCollectionName = "link_tables";
-
-export const expectedColumnsForImportDimension = [
-  "name",
-  "code",
-  "description",
-];
-
-export const expectedColumnsForImportDimensionValue = [
-  "name",
-  "code",
-  "parent",
-  "dimensionCode",
-  "description",
-];
 
 // Cubes
 export const cube_table_status = [
