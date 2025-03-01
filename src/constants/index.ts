@@ -73,9 +73,11 @@ export const expectedColumnsForImportDimension = [
   "code",
   "description",
 ];
+
 export const expectedColumnsForImportDimensionValue = [
   "name",
   "code",
+  "parent",
   "dimensionCode",
   "description",
 ];
