@@ -1,23 +1,5 @@
 /** @format */
 
-// Accounts
-export const incomeStmtCodes = [
-  "income",
-  "cogs",
-  "expense",
-  "non_op_income",
-  "non_op_expense",
-];
-
-export const balanceSheetCodes = ["assets", "liabilities", "equity"];
-
-export const accountTypeTagDisplayMap = {
-  PnL: "P&L",
-  BalanceSheet: "Balance Sheet",
-  Custom: "Custom",
-  Cube: "Cube",
-};
-
 // Alerts
 export const alertMessageDuration = 1;
 export const alertMessageDurationError = 4;
@@ -68,7 +50,7 @@ export const integrationDataTypes = [
   },
 ];
 
-export const requiredColumnsLevel = [
+export const requiredColumnsForLevelImport = [
   "name",
   "code",
   "parent",
@@ -76,43 +58,16 @@ export const requiredColumnsLevel = [
   "description",
 ];
 
-export const requiredColumnsAccount = [
-  "name",
-  "code",
-  "parent",
-  "description",
-  "accountType",
-  "displayAs",
-  "containsSalaryInfo",
-  "accountTypeTag",
-];
-
 export const datasourceTableTypes = [
-  { label: "Symbolic", value: "Symbolic" },
-  { label: "Union", value: "Union" },
-  { label: "Join", value: "Join" },
+  { label: "Symbolic", value: "symbolic" },
+  { label: "Union", value: "union" },
+  { label: "Join", value: "join" },
 ];
 
 // Misc / Uncategorized
 export const constSchemasCollectionName = "table_schemas";
 export const constLinkTablesCollectionName = "link_tables";
-export const expectedColumnsForImportLevel = [
-  "name",
-  "code",
-  "parent",
-  "currency",
-  "description",
-];
-export const expectedColumnsForImportAccount = [
-  "name",
-  "code",
-  "parent",
-  "description",
-  "account_type",
-  "account_type_tag",
-  "display_as",
-  "contains_salary_info",
-];
+
 export const expectedColumnsForImportDimension = [
   "name",
   "code",
@@ -127,18 +82,18 @@ export const expectedColumnsForImportDimensionValue = [
 
 // Cubes
 export const cube_table_status = [
-  { value: "Active", label: "Active" },
-  { value: "Inactive", label: "Inactive" },
+  { value: "active", label: "Active" },
+  { value: "inactive", label: "Inactive" },
 ];
 
 // Grids
 export enum GridType {
-  Cube = "Cube",
-  Table = "Table",
+  cube = "Cube",
+  table = "Table",
 }
 
 // Versions
 export const versionStatus = [
-  { value: "Locked", label: "Locked" },
-  { value: "Unlocked", label: "Unlocked" },
+  { value: "locked", label: "Locked" },
+  { value: "unlocked", label: "Unlocked" },
 ];
