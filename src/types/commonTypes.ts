@@ -85,7 +85,7 @@ export interface CSVDimensionImportContext {
 export interface CSVDimensionValueImportContext {
   clientId: string;
   instanceId: string;
-  dimensionId: string;
+  dimensionMapping: Record<string, string>;
   existingCodes: Set<string>;
   existingNames: Set<string>;
   parentCodeToId: Map<string, string>;
