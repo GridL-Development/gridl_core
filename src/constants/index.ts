@@ -50,7 +50,11 @@ export const integrationDataTypes = [
   },
 ];
 
-export const requiredColumnsForImportDimensionImport = ["name", "code"];
+export const requiredColumnsForImportDimensionImport = [
+  "name",
+  "code",
+  "description",
+];
 
 export const requiredColumnsForImportDimensionValueImport = [
   "name",
