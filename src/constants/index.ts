@@ -56,6 +56,7 @@ export const requiredColumnsForImportDimensionValueImport = [
   "name",
   "code",
   "dimension_code",
+  "parent",
 ];
 
 export const requiredColumnsForLevelImport = [
