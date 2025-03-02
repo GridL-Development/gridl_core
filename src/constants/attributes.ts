@@ -1,38 +1,38 @@
 /** @format */
 
-export const requiredColumnsForAccountAttributeImport = [
+export const requiredColumnsForAccountAttributesImport = [
   "name",
   "code",
   "description",
 ];
 
-export const requiredColumnsForAccountAttributeValueImport = [
+export const requiredColumnsForAccountAttributeValuesImport = [
   "name",
   "code",
   "parent",
   "attribute_code",
 ];
 
-export const requiredColumnsForLevelAttributeImport = [
+export const requiredColumnsForLevelAttributesImport = [
   "name",
   "code",
   "description",
 ];
 
-export const requiredColumnsForLevelAttributeValueImport = [
+export const requiredColumnsForLevelAttributeValuesImport = [
   "name",
   "code",
   "parent",
   "attribute_code",
 ];
 
-export const requiredColumnsForDimensionValueAttributeImport = [
+export const requiredColumnsForDimensionValueAttributesImport = [
   "name",
   "code",
   "description",
 ];
 
-export const requiredColumnsForDimensionValueAttributeValueImport = [
+export const requiredColumnsForDimensionValueAttributeValuesImport = [
   "name",
   "code",
   "attribute_code",
