@@ -75,6 +75,13 @@ export interface CSVAccountImportContext {
   parentCodeToId: Map<string, string>;
 }
 
+export interface CSVAccountAttributeImportContext {
+  clientId: string;
+  instanceId: string;
+  existingCodes: Set<string>;
+  existingNames: Set<string>;
+}
+
 export interface CSVDimensionImportContext {
   clientId: string;
   instanceId: string;
@@ -91,6 +98,13 @@ export interface CSVDimensionValueImportContext {
   parentCodeToId: Map<string, string>;
 }
 
+export interface CSVDimensionValueAttributeImportContext {
+  clientId: string;
+  instanceId: string;
+  existingCodes: Set<string>;
+  existingNames: Set<string>;
+}
+
 export interface CSVLevelImportContext {
   clientId: string;
   instanceId: string;
@@ -98,6 +112,13 @@ export interface CSVLevelImportContext {
   existingNames: Set<string>;
   currencyCodeToId: Map<string, string>;
   parentCodeToId: Map<string, string>;
+}
+
+export interface CSVLevelAttributeImportContext {
+  clientId: string;
+  instanceId: string;
+  existingCodes: Set<string>;
+  existingNames: Set<string>;
 }
 
 export interface CSVCubeDataImportContext {
