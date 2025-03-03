@@ -114,7 +114,7 @@ export interface CSVDimensionValueAttributeImportContext {
   existingNames: Set<string>;
 }
 
-export interface CSVAccountDimensionValueAttributeValuesImportContext {
+export interface CSVDimensionValueAttributeValuesImportContext {
   clientId: string;
   instanceId: string;
   existingCodes: Set<string>;
