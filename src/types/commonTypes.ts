@@ -139,7 +139,7 @@ export interface CSVLevelAttributeImportContext {
   existingNames: Set<string>;
 }
 
-export interface CSVLevelAttributeValueImportContext {
+export interface CSVLevelAttributeValuesImportContext {
   clientId: string;
   instanceId: string;
   existingCodes: Set<string>;
