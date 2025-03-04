@@ -92,9 +92,3 @@ export enum GridType {
   cube = "Cube",
   table = "Table",
 }
-
-// Versions
-export const versionStatus = [
-  { value: "locked", label: "Locked" },
-  { value: "unlocked", label: "Unlocked" },
-];
