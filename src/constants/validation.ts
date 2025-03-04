@@ -6,7 +6,7 @@ export const regexNumericError = `Only numbers are allowed`;
 
 // used for validation of codes
 export const minCharacters = 2;
-export const maxCharacters = 65;
+export const maxCharacters = 85;
 
 // This will match any string that contains only lowercase letters (a-z), numbers (0-9), underscores (_), and hyphens (-).
 export const regexNoSpecialCharsOrUppercase = /^[a-z0-9_-]*$/;
