@@ -186,6 +186,7 @@ export interface DimensionValueAttributeValueExtended
 export interface DimensionValueExtended extends DimensionValue {
   dimension: Dimension;
   path: string[];
+  parent?: DimensionValueExtended | null;
 }
 
 export interface ExportAccount
