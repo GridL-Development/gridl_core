@@ -218,6 +218,10 @@ export interface ExportDimensionValue {
   dimension_code: string;
 }
 
+export interface ExportDimensionValueArray {
+  ExportDimensionValue: ExportDimensionValue[];
+}
+
 export interface ExportDimensionValueAttribute
   extends Pick<DimensionValueAttribute, "code" | "name" | "description"> {}
 

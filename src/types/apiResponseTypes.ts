@@ -261,6 +261,10 @@ export interface APIResponseExportDimensionArray extends APIResponseType {
 }
 
 export interface APIResponseExportDimensionValue extends APIResponseType {
+  data: ExportDimensionValue;
+}
+
+export interface APIResponseExportDimensionValueArray extends APIResponseType {
   data: ExportDimensionValue[];
 }
 
