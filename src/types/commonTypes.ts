@@ -211,6 +211,13 @@ export interface ExportAccountAttribute
 export interface ExportDimension
   extends Pick<Dimension, "code" | "name" | "description"> {}
 
+export interface ExportDimensionValue {
+  code: DimensionValue["code"];
+  name: DimensionValue["name"];
+  parent_code: string | null;
+  dimension_code: string;
+}
+
 export interface ExportDimensionValueAttribute
   extends Pick<DimensionValueAttribute, "code" | "name" | "description"> {}
 

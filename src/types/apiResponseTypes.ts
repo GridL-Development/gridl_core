@@ -55,6 +55,7 @@ import {
   ValueLabelType,
   ValueLabelTypeWithChildren,
   CubeAccountStructureWithAccount,
+  ExportDimensionValue,
 } from "./commonTypes";
 
 export interface APIResponseType {
@@ -257,6 +258,10 @@ export interface APIResponseExportDimension extends APIResponseType {
 
 export interface APIResponseExportDimensionArray extends APIResponseType {
   data: ExportDimension[];
+}
+
+export interface APIResponseExportDimensionValue extends APIResponseType {
+  data: ExportDimensionValue[];
 }
 
 export interface APIResponseExportDimensionValueAttribute
