@@ -360,7 +360,7 @@ model Account {
   code                 String
   name                 String
   isRoot               Boolean                    @default(false) // defines an account that must sit directly under "GL Accounts" or "Custom Accounts"
-  isModelRoot          Boolean                    @default(false) // defines an account that is a root account for a cube
+  isModelRoot          Boolean                    @default(false) // defines an account that is a root account for a model
   accountType          AccountType
   accountTypeTag       AccountTypeTag
   group                YesNo                      @default(No) // defines an account that is a group of other accounts
@@ -369,6 +369,7 @@ model Account {
   displayAs            ActDisplayAs               @default(Currency)
   containsSalaryInfo   YesNo                      @default(No)
   description          String?
+  isParent             Boolean                    @default(false)
   instanceId           String                     @db.ObjectId
   instance             Instance                   @relation(fields: [instanceId], references: [id])
   clientId             String                     @db.ObjectId
