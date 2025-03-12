@@ -245,6 +245,17 @@ export interface ExportLevel
 export interface ExportLevelAttribute
   extends Pick<LevelAttribute, "code" | "name" | "description"> {}
 
+export interface ExportLevelAttributeValue {
+  code: LevelAttributeValue["code"];
+  name: LevelAttributeValue["name"];
+  parent_code: string | null;
+  attribute_code: string;
+}
+
+export interface ExportLevelAttributeValueArray {
+  ExportLevelAttributeValue: ExportLevelAttributeValue[];
+}
+
 export interface ExportVersion
   extends Pick<
     Version,

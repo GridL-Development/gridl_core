@@ -57,6 +57,7 @@ import {
   CubeAccountStructureWithAccount,
   ExportDimensionValue,
   ExportAccountAttributeValue,
+  ExportLevelAttributeValue,
 } from "./commonTypes";
 
 export interface APIResponseType {
@@ -295,6 +296,15 @@ export interface APIResponseExportLevelAttribute extends APIResponseType {
 
 export interface APIResponseExportLevelAttributeArray extends APIResponseType {
   data: ExportLevelAttribute[];
+}
+
+export interface APIResponseExportLevelAttributeValue extends APIResponseType {
+  data: ExportLevelAttributeValue;
+}
+
+export interface APIResponseExportLevelAttributeValueArray
+  extends APIResponseType {
+  data: ExportLevelAttributeValue[];
 }
 
 export interface APIResponseExportVersion extends APIResponseType {
