@@ -208,6 +208,17 @@ export interface ExportAccount
 export interface ExportAccountAttribute
   extends Pick<AccountAttribute, "code" | "name" | "description"> {}
 
+export interface ExportAccountAttributeValue {
+  code: AccountAttributeValue["code"];
+  name: AccountAttributeValue["name"];
+  parent_code: string | null;
+  attribute_code: string;
+}
+
+export interface ExportAccountAttributeValueArray {
+  ExportAccountAttributeValue: ExportAccountAttributeValue[];
+}
+
 export interface ExportDimension
   extends Pick<Dimension, "code" | "name" | "description"> {}
 
