@@ -1,24 +1,24 @@
 /** @format */
 
 export const plannedBy = [
-  { value: "balance", label: "Balance" },
-  { value: "delta", label: "Delta" },
+  { value: "Balance", label: "Balance" },
+  { value: "Delta", label: "Delta" },
 ];
 
 export const actualsBy = [
-  { value: "balance", label: "Balance" },
-  { value: "delta", label: "Delta" },
+  { value: "Balance", label: "Balance" },
+  { value: "Delta", label: "Delta" },
 ];
 
 export const displayAs = [
-  { value: "currency", label: "Currency" },
-  { value: "decimal", label: "Decimal" },
-  { value: "percentage", label: "Percentage" },
+  { value: "Currency", label: "Currency" },
+  { value: "Decimal", label: "Decimal" },
+  { value: "Percentage", label: "Percentage" },
 ];
 
 export const timeStratum = [
-  { value: "week", label: "Week" },
-  { value: "month", label: "Month" },
+  { value: "Week", label: "Week" },
+  { value: "Month", label: "Month" },
 ];
 
 export const actualsToggleDescription: string =

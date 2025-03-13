@@ -199,24 +199,26 @@ model Currency {
 }
 
 model Level {
-  id                   String                   @id @default(auto()) @map("_id") @db.ObjectId
-  code                 String
-  name                 String
-  isRoot               Boolean                  @default(false)
-  description          String?
-  parentId             String?                  @db.ObjectId
-  clientId             String                   @db.ObjectId
-  AttributeAndValues   LevelAttributeAndValue[]
-  parent               Level?                   @relation(name: "ChildLevels", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  instanceId           String                   @db.ObjectId
-  instance             Instance                 @relation(fields: [instanceId], references: [id])
-  currencyId           String                   @db.ObjectId
-  currency             Currency                 @relation(fields: [currencyId], references: [id])
-  childLevels          Level[]                  @relation("ChildLevels")
-  cubeData             CubeData[]
-  cubeDataCalculations CubeDataCalculations[]
-  createdAt            DateTime?                @default(now())
-  updatedAt            DateTime?                @updatedAt
+  id                         String                   @id @default(auto()) @map("_id") @db.ObjectId
+  code                       String
+  name                       String
+  isRoot                     Boolean                  @default(false)
+  description                String?
+  parentId                   String?                  @db.ObjectId
+  clientId                   String                   @db.ObjectId
+  AttributeAndValues         LevelAttributeAndValue[]
+  missingInheritedAttributes String[]                 @default([])
+  parent                     Level?                   @relation(name: "ChildLevels", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  isParent                   Boolean                  @default(false) // defines a level that is a parent of other levels
+  instanceId                 String                   @db.ObjectId
+  instance                   Instance                 @relation(fields: [instanceId], references: [id])
+  currencyId                 String                   @db.ObjectId
+  currency                   Currency                 @relation(fields: [currencyId], references: [id])
+  childLevels                Level[]                  @relation("ChildLevels")
+  cubeData                   CubeData[]
+  cubeDataCalculations       CubeDataCalculations[]
+  createdAt                  DateTime?                @default(now())
+  updatedAt                  DateTime?                @updatedAt
 
   @@unique(fields: [clientId, code, instanceId], name: "uniqueCode")
 }
@@ -356,32 +358,33 @@ model AccountAttributeAndValue {
 }
 
 model Account {
-  id                   String                     @id @default(auto()) @map("_id") @db.ObjectId
-  code                 String
-  name                 String
-  isRoot               Boolean                    @default(false) // defines an account that must sit directly under "GL Accounts" or "Custom Accounts"
-  isModelRoot          Boolean                    @default(false) // defines an account that is a root account for a model
-  accountType          AccountType
-  accountTypeTag       AccountTypeTag
-  group                YesNo                      @default(No) // defines an account that is a group of other accounts
-  plannedBy            ActPlanBy?
-  actualsBy            ActActualsBy?
-  displayAs            ActDisplayAs               @default(Currency)
-  containsSalaryInfo   YesNo                      @default(No)
-  description          String?
-  isParent             Boolean                    @default(false)
-  instanceId           String                     @db.ObjectId
-  instance             Instance                   @relation(fields: [instanceId], references: [id])
-  clientId             String                     @db.ObjectId
-  parentId             String?                    @db.ObjectId
-  parent               Account?                   @relation(name: "childAccounts", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  childAccounts        Account[]                  @relation("childAccounts")
-  AttributeAndValues   AccountAttributeAndValue[]
-  cubeAccounts         CubeAccountStructure[]
-  cubeData             CubeData[]
-  cubeDataCalculations CubeDataCalculations[]
-  createdAt            DateTime?                  @default(now())
-  updatedAt            DateTime?                  @updatedAt
+  id                         String                     @id @default(auto()) @map("_id") @db.ObjectId
+  code                       String
+  name                       String
+  isRoot                     Boolean                    @default(false) // defines an account that must sit directly under "GL Accounts" or "Custom Accounts"
+  isModelRoot                Boolean                    @default(false) // defines an account that is a root account for a model
+  accountType                AccountType
+  accountTypeTag             AccountTypeTag
+  group                      YesNo                      @default(No) // defines an account that is a group of other accounts
+  plannedBy                  ActPlanBy?
+  actualsBy                  ActActualsBy?
+  displayAs                  ActDisplayAs               @default(Currency)
+  containsSalaryInfo         YesNo                      @default(No)
+  description                String?
+  isParent                   Boolean                    @default(false) // defines an account that is a parent of other accounts
+  instanceId                 String                     @db.ObjectId
+  instance                   Instance                   @relation(fields: [instanceId], references: [id])
+  clientId                   String                     @db.ObjectId
+  parentId                   String?                    @db.ObjectId
+  missingInheritedAttributes String[]                   @default([])
+  parent                     Account?                   @relation(name: "childAccounts", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  childAccounts              Account[]                  @relation("childAccounts")
+  AttributeAndValues         AccountAttributeAndValue[]
+  cubeAccounts               CubeAccountStructure[]
+  cubeData                   CubeData[]
+  cubeDataCalculations       CubeDataCalculations[]
+  createdAt                  DateTime?                  @default(now())
+  updatedAt                  DateTime?                  @updatedAt
 
   @@unique([clientId, code, instanceId])
 }
@@ -422,17 +425,18 @@ model DimensionValue {
 }
 
 model DimensionValueAttribute {
-  id                 String                            @id @default(auto()) @map("_id") @db.ObjectId
-  code               String
-  name               String
-  description        String?
-  clientId           String                            @db.ObjectId
-  instanceId         String                            @db.ObjectId
-  instance           Instance                          @relation(fields: [instanceId], references: [id])
-  AttributeValues    DimensionValueAttributeValue[]
-  AttributeAndValues DimensionValueAttributeAndValue[]
-  updatedAt          DateTime?                         @updatedAt
-  createdAt          DateTime?                         @default(now())
+  id                         String                            @id @default(auto()) @map("_id") @db.ObjectId
+  code                       String
+  name                       String
+  description                String?
+  clientId                   String                            @db.ObjectId
+  instanceId                 String                            @db.ObjectId
+  missingInheritedAttributes String[]                          @default([])
+  instance                   Instance                          @relation(fields: [instanceId], references: [id])
+  AttributeValues            DimensionValueAttributeValue[]
+  AttributeAndValues         DimensionValueAttributeAndValue[]
+  updatedAt                  DateTime?                         @updatedAt
+  createdAt                  DateTime?                         @default(now())
 
   @@unique([clientId, code, instanceId])
 }
