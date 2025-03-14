@@ -406,6 +406,7 @@ export interface Grid {
   type: GridType;
   description: string | null;
   lastModified: Date;
+  createdAt: Date;
 }
 
 export interface SourceTableColumnProperty {
