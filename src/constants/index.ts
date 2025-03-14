@@ -83,8 +83,8 @@ export const constLinkTablesCollectionName = "link_tables";
 
 // Cubes
 export const cube_table_status = [
-  { value: "active", label: "Active" },
-  { value: "inactive", label: "Inactive" },
+  { value: "Active", label: "Active" },
+  { value: "Inactive", label: "Inactive" },
 ];
 
 // Grids
