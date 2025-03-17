@@ -394,6 +394,7 @@ model Dimension {
   code                  String
   name                  String
   description           String?
+  inUse                 YesNo
   dimensionValueDefault String?          @db.ObjectId
   clientId              String           @db.ObjectId
   instanceId            String           @db.ObjectId
@@ -409,6 +410,7 @@ model DimensionValue {
   id                   String                            @id @default(auto()) @map("_id") @db.ObjectId
   code                 String
   name                 String
+  inUse                YesNo
   parentId             String?                           @db.ObjectId
   clientId             String                            @db.ObjectId
   instanceId           String                            @db.ObjectId
