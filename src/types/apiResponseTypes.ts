@@ -193,6 +193,7 @@ export interface APIResponseDimension extends APIResponseType {
 
 export interface APIResponseDimensionArray extends APIResponseType {
   data: Dimension[];
+  rowCount: number;
 }
 
 export interface APIResponseDimensionValue extends APIResponseType {
