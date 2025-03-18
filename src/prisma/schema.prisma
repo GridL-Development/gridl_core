@@ -203,6 +203,7 @@ model Level {
   code                       String
   name                       String
   isRoot                     Boolean                  @default(false)
+  inUse                      YesNo                    @default(No) // Data exists in a cube for this level or one of its children
   description                String?
   parentId                   String?                  @db.ObjectId
   clientId                   String                   @db.ObjectId
@@ -284,6 +285,7 @@ enum AccountTypeTag {
   BalanceSheet
   Custom
   Cube
+  Root
 }
 
 enum ActPlanBy {
@@ -366,6 +368,7 @@ model Account {
   accountType                AccountType
   accountTypeTag             AccountTypeTag
   group                      YesNo                      @default(No) // defines an account that is a group of other accounts
+  inUse                      YesNo                      @default(No) // The account is used in a cube
   plannedBy                  ActPlanBy?
   actualsBy                  ActActualsBy?
   displayAs                  ActDisplayAs               @default(Currency)
