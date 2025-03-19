@@ -368,7 +368,7 @@ model Account {
   accountType                AccountType
   accountTypeTag             AccountTypeTag
   group                      YesNo                      @default(No) // defines an account that is a group of other accounts
-  inUse                      YesNo                      @default(No) // The account is used in a cube
+  inUse                      YesNo                      @default(No) // Data exists in a cube for this account or one of its children
   plannedBy                  ActPlanBy?
   actualsBy                  ActActualsBy?
   displayAs                  ActDisplayAs               @default(Currency)
@@ -397,7 +397,7 @@ model Dimension {
   code                  String
   name                  String
   description           String?
-  inUse                 YesNo
+  inUse                 YesNo            @default(No) // Data exists in a cube for this dimension or one of its children
   dimensionValueDefault String?          @db.ObjectId
   clientId              String           @db.ObjectId
   instanceId            String           @db.ObjectId
@@ -413,7 +413,7 @@ model DimensionValue {
   id                   String                            @id @default(auto()) @map("_id") @db.ObjectId
   code                 String
   name                 String
-  inUse                YesNo
+  inUse                YesNo                             @default(No) // Data exists in a cube for this dimension value or one of its children
   parentId             String?                           @db.ObjectId
   clientId             String                            @db.ObjectId
   instanceId           String                            @db.ObjectId
