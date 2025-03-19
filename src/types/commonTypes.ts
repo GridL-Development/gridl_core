@@ -97,7 +97,7 @@ export interface CSVDimensionImportContext {
   instanceId: string;
   existingCodes: Set<string>;
   existingNames: Set<string>;
-  existingRecords: Map<string, { code: string; name: string }>;
+  existingRecords?: Map<string, { code: string; name: string }>;
 }
 
 export interface CSVDimensionValueImportContext {
