@@ -278,6 +278,7 @@ model LevelAttribute {
 enum AccountType {
   GL
   Custom
+  Cube
 }
 
 enum AccountTypeTag {
