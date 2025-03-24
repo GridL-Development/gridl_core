@@ -481,8 +481,8 @@ model DimensionValueAttributeAndValue {
 }
 
 enum CubeStatus {
-  Active
-  Inactive
+  Active // active means that it can be edited and is linked to the gl/custom accounts
+  Archived // archived is locked and cannot be edited but the data will still flow into the GL
 }
 
 enum TableStatus {
