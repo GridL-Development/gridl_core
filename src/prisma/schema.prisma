@@ -744,6 +744,7 @@ model UserLog {
   clientId            String              @db.ObjectId
   instanceId          String              @db.ObjectId
   userId              String              @db.ObjectId
+  userEmail           String
   user                User                @relation(fields: [userId], references: [id])
   instance            Instance            @relation(fields: [instanceId], references: [id])
   action              UserLogAction
