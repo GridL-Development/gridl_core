@@ -535,22 +535,25 @@ type CubeDataDimensionality {
 }
 
 model CubeData {
-  id             String                   @id @default(auto()) @map("_id") @db.ObjectId
-  clientId       String                   @db.ObjectId
-  instanceId     String                   @db.ObjectId
-  cubeId         String                   @db.ObjectId
-  versionId      String                   @db.ObjectId
-  levelId        String                   @db.ObjectId
-  accountId      String                   @db.ObjectId
-  dimensionality CubeDataDimensionality[]
-  timespan       Json
-  createdAt      DateTime?                @default(now())
-  updatedAt      DateTime?                @updatedAt
-  cube           Cube                     @relation(fields: [cubeId], references: [id])
-  level          Level                    @relation(fields: [levelId], references: [id])
-  account        Account                  @relation(fields: [accountId], references: [id])
-  version        Version                  @relation(fields: [versionId], references: [id])
-  instance       Instance                 @relation(fields: [instanceId], references: [id])
+  id              String                   @id @default(auto()) @map("_id") @db.ObjectId
+  clientId        String                   @db.ObjectId
+  instanceId      String                   @db.ObjectId
+  cubeId          String                   @db.ObjectId
+  versionId       String                   @db.ObjectId
+  levelId         String                   @db.ObjectId
+  accountId       String                   @db.ObjectId
+  dimensionality  CubeDataDimensionality[]
+  intersectionKey String
+  timespan        Json
+  createdAt       DateTime?                @default(now())
+  updatedAt       DateTime?                @updatedAt
+  cube            Cube                     @relation(fields: [cubeId], references: [id])
+  level           Level                    @relation(fields: [levelId], references: [id])
+  account         Account                  @relation(fields: [accountId], references: [id])
+  version         Version                  @relation(fields: [versionId], references: [id])
+  instance        Instance                 @relation(fields: [instanceId], references: [id])
+
+  @@unique([clientId, instanceId, cubeId, versionId, intersectionKey]) // intersectionKey is the key that is used to identify the intersection of the level, account and dimension value
 }
 
 model CubeDataCalculations {
