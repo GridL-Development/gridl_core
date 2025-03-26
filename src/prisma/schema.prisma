@@ -66,6 +66,7 @@ model User {
   client           Client    @relation(fields: [clientId], references: [id])
   defaultInstance  String    @db.ObjectId
   selectedInstance String?   @db.ObjectId
+  userLogs         UserLog[]
   lastLogin        DateTime  @default(now())
   createdAt        DateTime? @default(now())
   updatedAt        DateTime? @updatedAt
@@ -135,6 +136,7 @@ model Instance {
   tableData                     TableData[]
   createdAt                     DateTime?                      @default(now())
   updatedAt                     DateTime?                      @updatedAt
+  userLogs                      UserLog[]
 
   @@unique([clientId, code])
 }
@@ -718,4 +720,38 @@ model DataSourceCredential {
   updatedAt             DateTime?                    @updatedAt
 
   @@unique([clientId, instanceId, code])
+}
+
+enum UserLogAction {
+  Login
+  Logout
+  Create
+  Update
+  Delete
+  Import
+  Export
+  Upload
+  Download
+}
+
+enum UserLogActionResult {
+  Success
+  Failure
+}
+
+model UserLog {
+  id                  String              @id @default(auto()) @map("_id") @db.ObjectId
+  clientId            String              @db.ObjectId
+  instanceId          String              @db.ObjectId
+  userId              String              @db.ObjectId
+  user                User                @relation(fields: [userId], references: [id])
+  instance            Instance            @relation(fields: [instanceId], references: [id])
+  action              UserLogAction
+  actionResult        UserLogActionResult
+  actionResultMessage String?
+  actionResultData    Json?
+  createdAt           DateTime?           @default(now())
+  updatedAt           DateTime?           @updatedAt
+
+  @@unique([clientId, instanceId, userId])
 }
