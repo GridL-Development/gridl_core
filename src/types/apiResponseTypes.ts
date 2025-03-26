@@ -22,6 +22,7 @@ import {
   LevelAttributeValue,
   Table,
   User,
+  UserLog,
   Version,
 } from "@prisma/client";
 import {
@@ -387,6 +388,14 @@ export interface APIResponseLoaderArray extends APIResponseType {
 
 export interface APIResponseLoaderColumnMappingType extends APIResponseType {
   data: LoaderColumnMappingType;
+}
+
+export interface APIResponseLog extends APIResponseType {
+  data: UserLog;
+}
+
+export interface APIResponseLogArray extends APIResponseType {
+  data: UserLog[];
 }
 
 export interface APIResponseCube extends APIResponseType {
