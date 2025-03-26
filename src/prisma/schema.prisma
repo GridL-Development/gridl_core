@@ -748,7 +748,7 @@ model UserLog {
   instance            Instance            @relation(fields: [instanceId], references: [id])
   action              UserLogAction
   actionResult        UserLogActionResult
-  actionResultMessage String?
+  actionResultMessage String
   actionResultData    Json?
   createdAt           DateTime?           @default(now())
   updatedAt           DateTime?           @updatedAt
