@@ -396,6 +396,7 @@ export interface APIResponseLog extends APIResponseType {
 
 export interface APIResponseLogArray extends APIResponseType {
   data: UserLog[];
+  rowCount?: number;
 }
 
 export interface APIResponseCube extends APIResponseType {
