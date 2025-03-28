@@ -373,6 +373,28 @@ export interface CubeDimensionWithDimensionValuesData {
   dimensionValueId: string;
 }
 
+export interface CubeLevel {
+  id: string;
+  code: string;
+  name: string;
+  cubeId: string;
+  parentId: string | undefined;
+  levelId: string;
+}
+
+export interface CubeLevelStructureWithLevel {
+  id: string;
+  isRoot: boolean;
+  cubeId: string;
+  parentId: string | null;
+  levelId: string;
+  level: {
+    id: string;
+    code: string;
+    name: string;
+  };
+}
+
 export interface CubeObjForGrid {
   name: string;
   dimensionality: string[];
