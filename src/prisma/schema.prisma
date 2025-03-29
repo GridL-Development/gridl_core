@@ -137,7 +137,6 @@ model Instance {
   tableData                     TableData[]
   createdAt                     DateTime?                      @default(now())
   updatedAt                     DateTime?                      @updatedAt
-  userLogs                      UserLog[]
 
   @@unique([clientId, code])
 }
@@ -206,6 +205,7 @@ model Level {
   code                       String
   name                       String
   isRoot                     Boolean                  @default(false)
+  isModelRoot                Boolean                  @default(false) // defines a level that is a root level for a cube or table
   inUse                      YesNo                    @default(No) // Data exists in a cube for this level or one of its children
   description                String?
   parentId                   String?                  @db.ObjectId
@@ -282,7 +282,8 @@ model LevelAttribute {
 enum AccountType {
   GL
   Custom
-  Cube
+  Cube // Cube is a special account type that is used to represent a cube root account
+  Table // Table is a special account type that is used to represent a table root account
 }
 
 enum AccountTypeTag {
@@ -290,7 +291,17 @@ enum AccountTypeTag {
   BalanceSheet
   Custom
   Cube
+  Table
   Root
+}
+
+enum RootAccountTypeTag {
+  root_gl
+  root_custom
+  root_cube
+  root_table
+  not_applicable
+  core_gl
 }
 
 enum ActPlanBy {
@@ -368,8 +379,8 @@ model Account {
   id                         String                     @id @default(auto()) @map("_id") @db.ObjectId
   code                       String
   name                       String
-  isRoot                     Boolean                    @default(false) // defines an account that must sit directly under "GL Accounts" or "Custom Accounts"
-  isModelRoot                Boolean                    @default(false) // defines an account that is a root account for a model
+  rootAccount                Boolean                    @default(false) // Identifies the account as one of the Root Accounts
+  rootAccountTypeTag         RootAccountTypeTag         @default(not_applicable) // Identifies the type of Root Account
   accountType                AccountType
   accountTypeTag             AccountTypeTag
   group                      YesNo                      @default(No) // defines an account that is a group of other accounts
@@ -507,6 +518,7 @@ model Cube {
   createdAt            DateTime?              @default(now())
   updatedAt            DateTime?              @updatedAt
   rootAccountId        String                 @db.ObjectId
+  rootLevelId          String                 @db.ObjectId
   instance             Instance               @relation(fields: [instanceId], references: [id])
   cubeData             CubeData[]
   cubeAccounts         CubeAccountStructure[]
@@ -769,7 +781,6 @@ model UserLog {
   userId              String              @db.ObjectId
   userEmail           String
   user                User                @relation(fields: [userId], references: [id])
-  instance            Instance            @relation(fields: [instanceId], references: [id])
   action              UserLogAction
   actionResult        UserLogActionResult
   actionResultMessage String
