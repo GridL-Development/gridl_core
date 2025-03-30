@@ -200,6 +200,11 @@ model Currency {
   @@unique([clientId, instanceId, currencyIsoCodeId, code])
 }
 
+enum FXRateType {
+  Avg
+  EOM
+}
+
 model Level {
   id                         String                   @id @default(auto()) @map("_id") @db.ObjectId
   code                       String
@@ -304,6 +309,11 @@ enum RootAccountTypeTag {
   core_gl
 }
 
+enum BalanceType {
+  Debit
+  Credit
+}
+
 enum ActPlanBy {
   Balance
   Delta
@@ -387,6 +397,8 @@ model Account {
   inUse                      YesNo                      @default(No) // Data exists in a cube for this account or one of its children
   plannedBy                  ActPlanBy?
   actualsBy                  ActActualsBy?
+  balanceType                BalanceType                @default(Debit)
+  fxRateType                 FXRateType                 @default(Avg)
   displayAs                  ActDisplayAs               @default(Currency)
   containsSalaryInfo         YesNo                      @default(No)
   description                String?
