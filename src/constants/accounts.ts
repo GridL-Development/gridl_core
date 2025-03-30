@@ -27,19 +27,6 @@ export const actualsToggleDescription: string =
 export const containsSalaryInfoToggleDescription: string =
   "This option enables security features related to data driven by salary level specific modeling";
 
-export const rootAccountCodes = [
-  "gl_accounts",
-  "assets",
-  "liabilities",
-  "equity",
-  "income",
-  "expense",
-  "cogs",
-  "non_op_income",
-  "non_op_expense",
-  "custom_accounts",
-];
-
 export const incomeStmtCodes = [
   "income",
   "cogs",
