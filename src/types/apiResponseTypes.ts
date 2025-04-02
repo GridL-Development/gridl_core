@@ -433,7 +433,10 @@ export interface APIResponseCubeLevelStructureWithLevel
 
 export interface APIResponseCubeLevelStructureWithLevelArray
   extends APIResponseType {
-  data: CubeLevelStructureWithLevel[];
+  data: {
+    rowData: CubeLevelStructureWithLevel[];
+    rowCount: number;
+  };
 }
 
 export interface APIResponseGrids extends APIResponseType {
