@@ -388,6 +388,7 @@ export interface CubeLevelStructureWithLevel {
   cubeId: string;
   parentId: string | null;
   levelId: string;
+  enabled: boolean;
   level: {
     id: string;
     code: string;
