@@ -29,6 +29,7 @@ import {
   User,
   Version,
   CubeAccountStructure,
+  CubeLevelStructure,
 } from "@prisma/client";
 import { GridType } from "../constants";
 
@@ -373,13 +374,7 @@ export interface CubeDimensionWithDimensionValuesData {
   dimensionValueId: string;
 }
 
-export interface CubeLevelStructureWithLevel {
-  id: string;
-  isRoot: boolean;
-  cubeId: string;
-  parentId: string | null;
-  levelId: string;
-  enabled: boolean;
+export interface CubeLevelStructureWithLevel extends CubeLevelStructure {
   level: {
     id: string;
     code: string;
