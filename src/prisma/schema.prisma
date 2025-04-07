@@ -542,20 +542,21 @@ model Cube {
 
 model CubeAccountStructure {
   id                   String                 @id @default(auto()) @map("_id") @db.ObjectId
-  instanceId           String                 @db.ObjectId
-  instance             Instance               @relation(fields: [instanceId], references: [id])
-  isRoot               Boolean                @default(false)
   clientId             String                 @db.ObjectId
+  instanceId           String                 @db.ObjectId
   parentId             String?                @db.ObjectId
+  isRoot               Boolean                @default(false)
   cubeId               String                 @db.ObjectId
-  cube                 Cube                   @relation(fields: [cubeId], references: [id])
   accountId            String                 @db.ObjectId
-  account              Account                @relation(fields: [accountId], references: [id])
+  enabled              Boolean                @default(false)
   createdAt            DateTime?              @default(now())
   updatedAt            DateTime?              @updatedAt
-  cubeDataCalculations CubeDataCalculations[]
+  cube                 Cube                   @relation(fields: [cubeId], references: [id])
+  account              Account                @relation(fields: [accountId], references: [id])
+  instance             Instance               @relation(fields: [instanceId], references: [id])
   parentAccount        CubeAccountStructure?  @relation(name: "childAccounts", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   childAccounts        CubeAccountStructure[] @relation("childAccounts")
+  cubeDataCalculations CubeDataCalculations[]
 }
 
 model CubeLevelStructure {
@@ -563,10 +564,10 @@ model CubeLevelStructure {
   clientId             String                 @db.ObjectId
   instanceId           String                 @db.ObjectId
   parentId             String?                @db.ObjectId
+  isRoot               Boolean                @default(false)
   cubeId               String                 @db.ObjectId
   levelId              String                 @db.ObjectId
   enabled              Boolean                @default(false)
-  isRoot               Boolean                @default(false)
   createdAt            DateTime?              @default(now())
   updatedAt            DateTime?              @updatedAt
   cube                 Cube                   @relation(fields: [cubeId], references: [id])
