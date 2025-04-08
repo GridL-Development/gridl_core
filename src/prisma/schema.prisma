@@ -558,6 +558,8 @@ model CubeAccountStructure {
   parentAccount        CubeAccountStructure?  @relation(name: "childAccounts", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   childAccounts        CubeAccountStructure[] @relation("childAccounts")
   cubeDataCalculations CubeDataCalculations[]
+
+  @@unique([clientId, instanceId, cubeId, accountId])
 }
 
 model CubeLevelStructure {
@@ -577,6 +579,8 @@ model CubeLevelStructure {
   parentLevel          CubeLevelStructure?    @relation(name: "childLevels", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   childLevels          CubeLevelStructure[]   @relation("childLevels")
   cubeDataCalculations CubeDataCalculations[]
+
+  @@unique([clientId, instanceId, cubeId, levelId])
 }
 
 type CubeDataDimensionality {
