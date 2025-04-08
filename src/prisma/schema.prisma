@@ -287,6 +287,7 @@ model LevelAttribute {
 enum AccountType {
   GL
   Custom
+  All // Combines all GL and Custom Accounts. Used for cube account structure
   Cube // Cube is a special account type that is used to represent a cube root account
   Table // Table is a special account type that is used to represent a table root account
 }
@@ -307,6 +308,7 @@ enum RootAccountTypeTag {
   root_table
   not_applicable
   core_gl
+  root_all
 }
 
 enum BalanceType {
@@ -529,7 +531,6 @@ model Cube {
   clientId             String                 @db.ObjectId
   createdAt            DateTime?              @default(now())
   updatedAt            DateTime?              @updatedAt
-  rootAccountId        String                 @db.ObjectId
   status               CubeStatus             @default(Active)
   instance             Instance               @relation(fields: [instanceId], references: [id])
   cubeData             CubeData[]
