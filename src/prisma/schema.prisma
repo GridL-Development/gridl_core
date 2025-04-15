@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "./generated/prisma"
 }
 
 datasource db {
@@ -395,7 +396,6 @@ model Account {
   rootAccountTypeTag         RootAccountTypeTag         @default(not_applicable) // Identifies the type of Root Account
   accountType                AccountType
   accountTypeTag             AccountTypeTag
-  group                      YesNo                      @default(No) // defines an account that is a group of other accounts
   inUse                      YesNo                      @default(No) // Data exists in a cube for this account or one of its children
   plannedBy                  ActPlanBy?
   actualsBy                  ActActualsBy?
