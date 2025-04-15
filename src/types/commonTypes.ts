@@ -30,7 +30,7 @@ import {
   Version,
   CubeAccountStructure,
   CubeLevelStructure,
-} from "@prisma/client";
+} from "../prisma/generated/client";
 import { GridType } from "../constants";
 
 export type PagePropsWithSearchParamsAndParams = {

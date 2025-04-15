@@ -24,7 +24,7 @@ import {
   User,
   UserLog,
   Version,
-} from "@prisma/client";
+} from "../prisma/generated/client";
 import {
   AccountAttributeValueWithPath,
   AccountWithAttributesAndValues,
