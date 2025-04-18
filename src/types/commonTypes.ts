@@ -433,13 +433,6 @@ export interface TreeSelectDataNode {
   children?: TreeSelectDataNode[];
 }
 
-export interface UserContextType {
-  user: User | null;
-  client: Client | null;
-  loading: boolean;
-  error: Error | null;
-}
-
 export interface UserExtended extends User {
   client: Client;
   country: Country;
