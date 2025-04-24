@@ -533,6 +533,7 @@ model Cube {
   createdAt            DateTime?              @default(now())
   updatedAt            DateTime?              @updatedAt
   status               CubeStatus             @default(Active)
+  isFavorite           Boolean                @default(false)
   instance             Instance               @relation(fields: [instanceId], references: [id])
   cubeData             CubeData[]
   cubeAccounts         CubeAccountStructure[]
@@ -602,6 +603,7 @@ model CubeData {
   createdAt       DateTime?                @default(now())
   updatedAt       DateTime?                @updatedAt
   dimensionality  CubeDataDimensionality[]
+  pendingDelete   Boolean                  @default(false)
   cube            Cube                     @relation(fields: [cubeId], references: [id])
   level           Level                    @relation(fields: [levelId], references: [id])
   account         Account                  @relation(fields: [accountId], references: [id])
@@ -656,6 +658,7 @@ model Table {
   name              String
   code              String
   description       String?
+  isFavorite        Boolean                 @default(false)
   createdAt         DateTime?               @default(now())
   updatedAt         DateTime?               @updatedAt
   instance          Instance                @relation(fields: [instanceId], references: [id])

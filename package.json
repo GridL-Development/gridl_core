@@ -25,7 +25,8 @@
   },
   "dependencies": {
     "@prisma/client": "^6.6.0",
-    "ag-grid-community": "^33.2.4"
+    "ag-grid-community": "^33.2.4",
+    "tabulator-tables": "^6.3.1"
   },
   "devDependencies": {
     "prisma": "^6.6.0",
