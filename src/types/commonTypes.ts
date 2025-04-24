@@ -372,6 +372,7 @@ export interface CubeDimensionWithDimensionValuesData {
   code: string;
   dimensionValueName: string;
   dimensionValueId: string;
+  dimensionValueCode: string;
 }
 
 export interface CubeLevelStructureWithLevel extends CubeLevelStructure {
