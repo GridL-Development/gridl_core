@@ -72,6 +72,8 @@ model User {
   lastLogin        DateTime  @default(now())
   createdAt        DateTime? @default(now())
   updatedAt        DateTime? @updatedAt
+
+  @@unique([clientId, authProviderId])
 }
 
 model Client {
@@ -232,7 +234,8 @@ model Level {
   createdAt                  DateTime?                @default(now())
   updatedAt                  DateTime?                @updatedAt
 
-  @@unique(fields: [clientId, code, instanceId], name: "uniqueCode")
+  @@unique(fields: [clientId, instanceId, code], name: "clientInstanceCode")
+  @@index([clientId, instanceId, parentId])
 }
 
 model LevelAttributeAndValue {
@@ -420,7 +423,8 @@ model Account {
   createdAt                  DateTime?                  @default(now())
   updatedAt                  DateTime?                  @updatedAt
 
-  @@unique([clientId, code, instanceId])
+  @@unique(fields: [clientId, instanceId, code])
+  @@index([clientId, instanceId, parentId])
 }
 
 model Dimension {
