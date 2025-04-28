@@ -408,10 +408,6 @@ export interface APIResponseCubeArray extends APIResponseType {
   data: Cube[];
 }
 
-export interface APIResponseCubeData extends APIResponseType {
-  data: any;
-}
-
 export interface APIResponseCubeAccountStructureWithAccount
   extends APIResponseType {
   data: CubeAccountStructureWithAccount;

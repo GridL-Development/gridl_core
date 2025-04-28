@@ -25,7 +25,6 @@ import {
   LevelAttribute,
   LevelAttributeAndValue,
   LevelAttributeValue,
-  CubeData,
   User,
   Version,
   CubeAccountStructure,
@@ -350,22 +349,6 @@ export interface CubeAccountStructureWithCodeAndName
   accountTypeTag: AccountTypeTag;
 }
 
-export interface CubeDataType {
-  clientId: string;
-  instanceId: string;
-  cubeId: string;
-  versionId: string;
-  rowData: CubeDataRowType[];
-}
-
-export interface CubeDataRowType {
-  id?: string;
-  levelId?: string;
-  accountId?: string;
-  dimensionality: { dimensionId: string; dimensionValueId: string }[];
-  timespan: Record<number, Record<number, { value: number }>>[];
-}
-
 export interface CubeDimensionWithDimensionValuesData {
   id: string;
   name: string;
@@ -387,19 +370,6 @@ export interface CubeObjForGrid {
   name: string;
   dimensionality: string[];
   dimensions: Dimension[];
-}
-
-export interface CubeDataWithLevelAndAccount extends CubeData {
-  level: {
-    name: string;
-  };
-  account: {
-    name: string;
-  };
-  dimensionality: {
-    dimensionId: string;
-    dimensionValueId: string;
-  }[];
 }
 
 export interface CubeVersionData {
