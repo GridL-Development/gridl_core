@@ -92,5 +92,3 @@ export enum GridType {
   cube = "Cube",
   table = "Table",
 }
-
-export const maxRowsForGrid = 10000; // Sets a hard limit on the number of rows that can be displayed in a grid.
