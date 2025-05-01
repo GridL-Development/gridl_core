@@ -24,12 +24,12 @@
     "schema": "src/prisma/schema.prisma"
   },
   "dependencies": {
-    "@prisma/client": "^6.6.0",
+    "@prisma/client": "^6.7.0",
     "ag-grid-community": "^33.2.4",
     "tabulator-tables": "^6.3.1"
   },
   "devDependencies": {
-    "prisma": "^6.6.0",
+    "prisma": "^6.7.0",
     "typescript": "^5.7.2"
   }
 }
