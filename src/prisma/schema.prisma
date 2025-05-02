@@ -199,6 +199,8 @@ model Currency {
   defaults          Config[]
   createdAt         DateTime?       @default(now())
   updatedAt         DateTime?       @updatedAt
+  ratesFrom         ExchangeRate[]  @relation("FromCurrency")
+  ratesTo           ExchangeRate[]  @relation("ToCurrency")
 
   @@unique([clientId, instanceId, currencyIsoCodeId, code])
 }
@@ -206,6 +208,21 @@ model Currency {
 enum FXRateType {
   Avg
   EOM
+}
+
+model ExchangeRate {
+  id             String     @id @default(auto()) @map("_id") @db.ObjectId
+  fromCurrencyId String     @db.ObjectId
+  toCurrencyId   String     @db.ObjectId
+  fromCurrency   Currency   @relation("FromCurrency", fields: [fromCurrencyId], references: [id])
+  toCurrency     Currency   @relation("ToCurrency", fields: [toCurrencyId], references: [id])
+  rateType       FXRateType @default(Avg) // matches enum you already have
+  rate           BigInt // default scaling will be 9 decimal places
+  effectiveDate  DateTime // Used to support historical rates
+  createdAt      DateTime?  @default(now())
+  updatedAt      DateTime?  @updatedAt
+
+  @@index([fromCurrencyId, toCurrencyId, effectiveDate])
 }
 
 model Level {
