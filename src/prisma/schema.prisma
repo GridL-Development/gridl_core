@@ -212,6 +212,9 @@ enum FXRateType {
 
 model ExchangeRate {
   id             String     @id @default(auto()) @map("_id") @db.ObjectId
+  clientId       String     @db.ObjectId
+  instanceId     String     @db.ObjectId
+  versionId      String     @db.ObjectId
   fromCurrencyId String     @db.ObjectId
   toCurrencyId   String     @db.ObjectId
   fromCurrency   Currency   @relation("FromCurrency", fields: [fromCurrencyId], references: [id])
@@ -222,7 +225,7 @@ model ExchangeRate {
   createdAt      DateTime?  @default(now())
   updatedAt      DateTime?  @updatedAt
 
-  @@index([fromCurrencyId, toCurrencyId, effectiveDate])
+  @@unique([clientId, instanceId, versionId, fromCurrencyId, toCurrencyId, effectiveDate])
 }
 
 model Level {
