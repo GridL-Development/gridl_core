@@ -190,7 +190,7 @@ model Currency {
   currencyIsoCodeId String          @db.ObjectId
   currencyIsoCode   CurrencyIsoCode @relation(fields: [currencyIsoCodeId], references: [id])
   assignedLevels    Int
-  isDefault         YesNo           @default(No)
+  isDefault         YesNo           @default(No) // Identifies the default corporate currency for the instance
   decimalPlaces     Int             @default(2)
   clientId          String          @db.ObjectId
   instanceId        String          @db.ObjectId
@@ -206,7 +206,7 @@ model Currency {
 }
 
 enum FXRateType {
-  Avg
+  AVG
   EOM
 }
 
@@ -216,7 +216,7 @@ model ExchangeRate {
   toCurrencyId   String     @db.ObjectId
   fromCurrency   Currency   @relation("FromCurrency", fields: [fromCurrencyId], references: [id])
   toCurrency     Currency   @relation("ToCurrency", fields: [toCurrencyId], references: [id])
-  rateType       FXRateType @default(Avg) // matches enum you already have
+  rateType       FXRateType @default(AVG) // matches enum you already have
   rate           BigInt // default scaling will be 9 decimal places
   effectiveDate  DateTime // Used to support historical rates
   createdAt      DateTime?  @default(now())
@@ -419,7 +419,7 @@ model Account {
   plannedBy                  ActPlanBy?
   actualsBy                  ActActualsBy?
   balanceType                BalanceType                @default(Debit)
-  fxRateType                 FXRateType                 @default(Avg)
+  fxRateType                 FXRateType                 @default(AVG)
   displayAs                  ActDisplayAs               @default(Currency)
   containsSalaryInfo         YesNo                      @default(No)
   description                String?
@@ -606,21 +606,22 @@ type CubeDataDimensionality {
 }
 
 model FinancialFact {
-  id             String                   @id @default(auto()) @map("_id") @db.ObjectId
-  clientId       String                   @db.ObjectId
-  instanceId     String                   @db.ObjectId
-  instance       Instance                 @relation(fields: [instanceId], references: [id])
-  cubeId         String                   @db.ObjectId
-  cube           Cube                     @relation(fields: [cubeId], references: [id])
-  versionId      String                   @db.ObjectId
-  version        Version                  @relation(fields: [versionId], references: [id])
-  levelId        String                   @db.ObjectId
-  level          Level                    @relation(fields: [levelId], references: [id])
-  accountId      String                   @db.ObjectId
-  account        Account                  @relation(fields: [accountId], references: [id])
-  date           DateTime                 @db.Date // Represents the specific period (e.g., start of month/week)
-  value          BigInt                   @db.Long // Change to BigInt @db.Long
-  dimensionality CubeDataDimensionality[] // Reusing the type for consistency
+  id              String                   @id @default(auto()) @map("_id") @db.ObjectId
+  clientId        String                   @db.ObjectId
+  instanceId      String                   @db.ObjectId
+  instance        Instance                 @relation(fields: [instanceId], references: [id])
+  cubeId          String                   @db.ObjectId
+  cube            Cube                     @relation(fields: [cubeId], references: [id])
+  versionId       String                   @db.ObjectId
+  version         Version                  @relation(fields: [versionId], references: [id])
+  levelId         String                   @db.ObjectId
+  level           Level                    @relation(fields: [levelId], references: [id])
+  accountId       String                   @db.ObjectId
+  account         Account                  @relation(fields: [accountId], references: [id])
+  date            DateTime                 @db.Date // Represents the specific period (e.g., start of month/week)
+  value           BigInt                   @db.Long // Change to BigInt @db.Long
+  translatedValue BigInt? // The local currency translated to the default currency
+  dimensionality  CubeDataDimensionality[] // Reusing the type for consistency
 
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
