@@ -817,3 +817,48 @@ model UserLog {
   createdAt           DateTime?           @default(now())
   updatedAt           DateTime?           @updatedAt
 }
+
+enum ValidationStatus {
+  Pending /// Initial state before validation
+  Valid /// Passed all validation checks
+  Error /// Failed one or more validation checks
+}
+
+model Staging_Account {
+  id                    String           @id @default(auto()) @map("_id") @db.ObjectId
+  importJobId           String // Identifier linking this record to a specific import job run
+  clientId              String           @db.ObjectId
+  instanceId            String           @db.ObjectId
+  code                  String
+  name                  String
+  parentCode            String?
+  description           String?
+  rawDisplayAs          String?
+  rawContainsSalaryInfo String?
+  originalRowData       Json?
+  validationStatus      ValidationStatus @default(Pending)
+  validationErrors      String[]
+  isUpdate              Boolean          @default(false) /// Flag indicating if this code corresponds to an existing account in the main table
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+
+  /// Unique constraint to handle upserts during loading and prevent duplicate codes per job
+  @@unique([importJobId, clientId, instanceId, code])
+  @@index([importJobId])
+  @@index([importJobId, validationStatus]) /// Index for quickly finding records with errors
+}
+
+// Added ImportJob Model as requested
+model ImportJob {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  initiatedBy  String // e.g., user ID or service name
+  status       String   @default("pending") // e.g., pending, processing, completed, failed
+  errorMessage String?
+  clientId     String?  @db.ObjectId
+  instanceId   String?  @db.ObjectId
+  importMethod String?
+  totalRows    Int?
+  errorRows    Int?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
