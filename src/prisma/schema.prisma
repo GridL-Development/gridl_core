@@ -55,23 +55,24 @@ enum userRole {
 }
 
 model User {
-  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  id               String      @id @default(auto()) @map("_id") @db.ObjectId
   firstName        String
   lastName         String
-  email            String    @unique
-  authProviderId   String    @unique
-  role             userRole  @default(User)
-  countryId        String?   @db.ObjectId
-  country          Country?  @relation(fields: [countryId], references: [id])
+  email            String      @unique
+  authProviderId   String      @unique
+  role             userRole    @default(User)
+  countryId        String?     @db.ObjectId
+  country          Country?    @relation(fields: [countryId], references: [id])
   permissions      String[]
-  clientId         String    @db.ObjectId
-  client           Client    @relation(fields: [clientId], references: [id])
-  defaultInstance  String    @db.ObjectId
-  selectedInstance String?   @db.ObjectId
+  clientId         String      @db.ObjectId
+  client           Client      @relation(fields: [clientId], references: [id])
+  defaultInstance  String      @db.ObjectId
+  selectedInstance String?     @db.ObjectId
+  importJobs       ImportJob[]
   userLogs         UserLog[]
-  lastLogin        DateTime  @default(now())
-  createdAt        DateTime? @default(now())
-  updatedAt        DateTime? @updatedAt
+  lastLogin        DateTime    @default(now())
+  createdAt        DateTime?   @default(now())
+  updatedAt        DateTime?   @updatedAt
 
   @@unique([clientId, authProviderId])
 }
@@ -848,17 +849,17 @@ model Staging_Account {
   @@index([importJobId, validationStatus]) /// Index for quickly finding records with errors
 }
 
-// Added ImportJob Model as requested
 model ImportJob {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  initiatedBy  String // e.g., user ID or service name
-  status       String   @default("pending") // e.g., pending, processing, completed, failed
-  errorMessage String?
-  clientId     String?  @db.ObjectId
-  instanceId   String?  @db.ObjectId
-  importMethod String?
-  totalRows    Int?
-  errorRows    Int?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  initiatedBy    String?  @db.ObjectId // e.g., user ID or service name - Made optional
+  initiatingUser User?    @relation(fields: [initiatedBy], references: [id]) // Made relation optional
+  status         String   @default("pending") // e.g., pending, processing, completed, failed
+  errorMessage   String?
+  clientId       String?  @db.ObjectId
+  instanceId     String?  @db.ObjectId
+  importMethod   String?
+  totalRows      Int?
+  errorRows      Int?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
