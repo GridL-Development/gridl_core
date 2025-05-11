@@ -19,18 +19,6 @@ enum YesNo {
   No
 }
 
-model Config {
-  id                         String          @id @default(auto()) @map("_id") @db.ObjectId
-  defaultIsoCurrencyId       String          @db.ObjectId
-  defaultIsoCurrency         CurrencyIsoCode @relation(fields: [defaultIsoCurrencyId], references: [id])
-  defaultCurrencyId          String          @db.ObjectId
-  defaultCurrency            Currency        @relation(fields: [defaultCurrencyId], references: [id])
-  defaultTopLevelName        String
-  defaultTopLevelDescription String
-  createdAt                  DateTime?       @default(now())
-  updatedAt                  DateTime?       @updatedAt
-}
-
 model Country {
   id              String    @id @default(auto()) @map("_id") @db.ObjectId
   name            String
@@ -121,9 +109,13 @@ model Instance {
   description                   String?
   status                        instanceStatus                 @default(Active)
   userIds                       String[]                       @db.ObjectId
+  defaultIsoCurrencyId          String                         @db.ObjectId
+  defaultIsoCurrency            CurrencyIsoCode                @relation("InstanceDefaultIsoCurrency", fields: [defaultIsoCurrencyId], references: [id])
+  defaultCurrencyId             String?                        @db.ObjectId
+  defaultCurrency               Currency?                      @relation("InstanceDefaultCurrency", fields: [defaultCurrencyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   levels                        Level[]
   versions                      Version[]
-  currencies                    Currency[]
+  currencies                    Currency[]                     @relation("InstanceAllCurrencies")
   accounts                      Account[]
   cubes                         Cube[]
   dimensions                    Dimension[]
@@ -173,13 +165,13 @@ model Version {
 }
 
 model CurrencyIsoCode {
-  id         String     @id @default(auto()) @map("_id") @db.ObjectId
-  code       String
-  name       String
-  currencies Currency[]
-  config     Config[]
-  createdAt  DateTime?  @default(now())
-  updatedAt  DateTime?  @updatedAt
+  id               String     @id @default(auto()) @map("_id") @db.ObjectId
+  code             String
+  name             String
+  currencies       Currency[]
+  instancesDefault Instance[] @relation("InstanceDefaultIsoCurrency")
+  createdAt        DateTime?  @default(now())
+  updatedAt        DateTime?  @updatedAt
 
   @@unique([code])
 }
@@ -195,9 +187,9 @@ model Currency {
   decimalPlaces     Int             @default(2)
   clientId          String          @db.ObjectId
   instanceId        String          @db.ObjectId
-  instance          Instance        @relation(fields: [instanceId], references: [id])
+  instance          Instance        @relation("InstanceAllCurrencies", fields: [instanceId], references: [id])
+  instancesDefault  Instance[]      @relation("InstanceDefaultCurrency")
   levels            Level[]
-  defaults          Config[]
   createdAt         DateTime?       @default(now())
   updatedAt         DateTime?       @updatedAt
   ratesFrom         ExchangeRate[]  @relation("FromCurrency")
